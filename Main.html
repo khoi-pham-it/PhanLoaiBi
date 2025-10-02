@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Phân loại bi màu — Người chơi vs AI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .game-container {
+      text-align: center;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .balls, .buckets {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .ball {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin: 10px;
+      cursor: grab;
+    }
+
+    .bucket {
+      width: 120px;
+      height: 150px;
+      border: 3px dashed #666;
+      margin: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* Popup modal chọn độ khó */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px 30px;
+      width: 90%;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .modal h2 {
+      margin-bottom: 20px;
+    }
+
+    .difficulty-options {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .difficulty-card {
+      border: 3px solid transparent;
+      border-radius: 12px;
+      padding: 15px;
+      width: 200px;
+      margin: 10px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .difficulty-card img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+
+    .difficulty-card.easy { border-color: green; }
+    .difficulty-card.medium { border-color: blue; }
+    .difficulty-card.hard { border-color: red; }
+
+    .difficulty-card button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .difficulty-card.easy button { background: green; }
+    .difficulty-card.medium button { background: blue; }
+    .difficulty-card.hard button { background: red; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .difficulty-card {
+        width: 90%;
+      }
+    }
+    :root {
+      --bg: #0f1724;
+      --accent: #7dd3fc;
+      --muted: #94a3b8;
+      --card: rgba(255, 255, 255, 0.03);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+      margin: 0;
+      padding: 24px;
+      background: linear-gradient(180deg, #071029 0%, #0b1220 100%);
+      color: #e6eef8;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+
+    button,
+    select {
+      background: var(--accent);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: #012a36;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    select {
+      background: #1e293b;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .game {
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(2, 6, 23, 0.6);
+    }
+
+    .boardWrap {
+      display: flex;
+      gap: 28px;
+      justify-content: space-between;
+    }
+
+    .side {
+      flex: 1;
+    }
+
+    .side h2 {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+
+    .board {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+      padding: 20px;
+      height: 300px;
+      align-items: flex-end;
+    }
+
+    .bucket {
+      width: 100px;
+      height: 200px;
+      background: linear-gradient(180deg, #2b3b55, #162033);
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 6px;
+      position: relative;
+      transition: .18s;
+      flex-wrap: wrap;
+      overflow: auto;
+    }
+
+    .bucket[data-color="red"] {
+      border: 2px solid #f87171;
+    }
+
+    .bucket[data-color="yellow"] {
+      border: 2px solid #facc15;
+    }
+
+    .bucket[data-color="blue"] {
+      border: 2px solid #60a5fa;
+    }
+
+    .bucket span {
+      position: absolute;
+      top: -20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .bucket.highlight {
+      box-shadow: 0 6px 18px rgba(125, 211, 252, 0.3);
+      transform: translateY(-4px);
+    }
+
+    /* small badge count bottom-left */
+    .bucket .count {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      color: #fff;
+      font-size: 12px;
+      padding: 3px 6px;
+      border-radius: 10px;
+    }
+
+    .marbles {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px;
+      min-height: 56px;
+    }
+
+    .marble {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: grab;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+      transition: transform .2s;
+      user-select: none;
+    }
+
+    .marble.red {
+      background: #ef4444;
+    }
+
+    .marble.yellow {
+      background: #facc15;
+    }
+
+    .marble.blue {
+      background: #3b82f6;
+    }
+
+    .marble.dragging {
+      opacity: .5;
+      transform: scale(1.05);
+    }
+
+    .info {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .info div {
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .timer {
+      font-size: 16px;
+      font-weight: 700;
+      margin-left: 20px;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .popup {
+      background: #1e293b;
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .6);
+    }
+
+    .popup h2 {
+      margin-top: 0;
+    }
+
+    .flying {
+      position: fixed;
+      z-index: 100;
+      pointer-events: none;
+      transition: transform .6s ease-in-out, opacity .6s;
+    }
+
+    /* responsive */
+    @media (max-width:768px) {
+      body {
+        padding: 12px;
+      }
+
+      h1 {
+        font-size: 16px;
+      }
+
+      .boardWrap {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .board {
+        height: 200px;
+      }
+
+      .bucket {
+        width: 70px;
+        height: 140px;
+      }
+
+      .marble {
+        width: 28px;
+        height: 28px;
+      }
+
+      .info {
+        font-size: 12px;
+      }
+
+      button,
+      select {
+        padding: 6px 10px;
+        font-size: 14px;
+      }
+
+      .timer {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width:480px) {
+      h1 {
+        font-size: 14px;
+      }
+
+      .bucket {
+        width: 60px;
+        height: 120px;
+      }
+
+      .marble {
+        width: 24px;
+        height: 24px;
+      }
+
+      .info {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Modal chọn độ khó -->
+  <div class="modal" id="difficultyModal">
+    <div class="modal-content">
+      <h2 style="color: red;"> Chọn bạn 'AI' để thi đấu</h2>
+      <div class="difficulty-options">
+        <div class="difficulty-card easy">
+          <img src="https://thumb.ac-illust.com/ec/ec7de22b20b117c9902b8aade7b999f9_t.jpeg" alt="Dễ">
+          <h3 style="color: green;">AI HỌC SINH (DỄ) </h3>
+          <p style="color: red">Đã được huấn luyện trong 1 ngày</p>
+          <button onclick="selectDifficulty('easy')">Chọn</button>
+        </div>
+        <div class="difficulty-card medium">
+          <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="Trung Bình">
+          <h3 style="color: green;">AI TRƯỞNG THÀNH (BÌNH THƯỜNG)</h3>
+          <p style="color: red">Đã được huấn luyện trong 1 tuần</p>
+          <button onclick="selectDifficulty('medium')">Chọn</button>
+        </div>
+        <div class="difficulty-card hard">
+          <img src="https://i.pinimg.com/564x/0a/d0/c2/0ad0c2dcf22c5257a8bd6385c37aa100.jpg" alt="Khó">
+          <h3 style="color: green;">AI LÃO LÀNG (SIÊU KHÓ)</h3>
+          <p style="color: red">Đã được huấn luyện trong 1 tháng</p>
+          <button onclick="selectDifficulty('hard')">Chọn</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <h1>Phân loại bi màu — Người chơi vs AI</h1>
+      <div>
+        <select id="difficulty">
+          <option value="easy">Dễ</option>
+          <option value="medium" selected>Trung bình</option>
+          <option value="hard">Khó</option>
+        </select>
+        <button id="startBtn">Bắt đầu</button>
+        <span class="timer">⏱ <span id="timeLeft">30</span>s</span>
+      </div>
+    </header>
+
+    <section class="game">
+      <div class="boardWrap">
+        <div class="side">
+          <h2>Người chơi</h2>
+          <div class="board" id="boardHuman">
+            <div class="bucket" data-color="red"><span>Đỏ</span>
+              <div class="count">0</div>
+            </div>
+            <div class="bucket" data-color="yellow"><span>Vàng</span>
+              <div class="count">0</div>
+            </div>
+            <div class="bucket" data-color="blue"><span>Xanh</span>
+              <div class="count">0</div>
+            </div>
+          </div>
+          <div class="marbles" id="humanMarbles" aria-live="polite"></div>
+          <div class="info">Điểm: <span id="scoreHuman">0</span> | <span id="statusHuman">...</span></div>
+        </div>
+
+        <div class="side">
+          <h2>AI</h2>
+          <div class="board" id="boardAI">
+            <div class="bucket" data-color="red"><span>Đỏ</span>
+              <div class="count">0</div>
+            </div>
+            <div class="bucket" data-color="yellow"><span>Vàng</span>
+              <div class="count">0</div>
+            </div>
+            <div class="bucket" data-color="blue"><span>Xanh</span>
+              <div class="count">0</div>
+            </div>
+          </div>
+          <div class="marbles" id="aiMarbles"></div>
+          <div class="info">Điểm: <span id="scoreAI">0</span> | <span id="statusAI">...</span></div>
+        </div>
+      </div>
+      <div class="footer">Kéo thả bi vào đúng lọ. AI cũng phân loại cùng lúc.</div>
+    </section>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="popup">
+      <h2>Kết quả</h2>
+      <p id="resultText"></p>
+      <button id="btnRestart">Chơi lại</button>
+    </div>
+  </div>
+
+  <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <script>
+   
+    /* ====== DOM refs ====== */
+    const colors = ['red', 'yellow', 'blue'];
+    const humanMarbles = document.getElementById('humanMarbles');
+    const aiMarbles = document.getElementById('aiMarbles');
+    const scoreHumanEl = document.getElementById('scoreHuman');
+    const scoreAIEl = document.getElementById('scoreAI');
+    const statusHuman = document.getElementById('statusHuman');
+    const statusAI = document.getElementById('statusAI');
+    const startBtn = document.getElementById('startBtn');
+    const difficultyEl = document.getElementById('difficulty');
+    const timeLeftEl = document.getElementById('timeLeft');
+    const overlay = document.getElementById('overlay');
+    const resultText = document.getElementById('resultText');
+    const btnRestart = document.getElementById('btnRestart');
+    const soundCorrect = document.getElementById('soundCorrect');
+    const soundWrong = document.getElementById('soundWrong');
+
+    /* ====== state ====== */
+    let MARBLES_TOTAL = 6;
+    let AI_SPEED = 700; // ms between AI moves
+    let TIME_LIMIT = 30;
+    let scoreHuman = 0, scoreAI = 0;
+    let gameActive = false;
+    let mainTimer = null, aiTimer = null;
+    let remainingTime = TIME_LIMIT;
+
+    /* helper: uid */
+    function uid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+    /* update bucket counts for a given board (boardId: 'boardHuman'|'boardAI') */
+    function updateBucketCounts(boardId) {
+      const buckets = document.querySelectorAll(`#${boardId} .bucket`);
+      buckets.forEach(b => {
+        const countEl = b.querySelector('.count');
+        const color = b.dataset.color;
+        // count marbles that are direct children inside bucket
+        const cnt = b.querySelectorAll(`.marble.${color}`).length;
+        countEl.textContent = cnt;
+      });
+    }
+
+    /* clear existing marbles in buckets */
+    function clearBuckets(boardId) {
+      document.querySelectorAll(`#${boardId} .bucket`).forEach(b => {
+        // remove marble nodes that are inside bucket container
+        b.querySelectorAll('.marble').forEach(m => m.remove());
+        // reset badge
+        const countEl = b.querySelector('.count');
+        if (countEl) countEl.textContent = 0;
+      });
+    }
+
+    /* create a marble in given container (humanMarbles or aiMarbles) */
+    function createMarble(container, color = null) {
+      const c = color || colors[Math.floor(Math.random() * colors.length)];
+      const m = document.createElement('div');
+      m.className = 'marble ' + c;
+      const id = uid();
+      m.dataset.color = c;
+      m.dataset.id = id;
+      // ARIA for screen readers
+      m.setAttribute('role', 'button');
+      m.setAttribute('aria-label', `Bi ${c}`);
+      // only human marbles are draggable by player
+      if (container === humanMarbles) {
+        m.draggable = true;
+        m.addEventListener('dragstart', e => {
+          if (!gameActive) { e.preventDefault(); return; }
+          e.dataTransfer.setData('text/plain', id);
+          // store color too
+          e.dataTransfer.setData('color', c);
+          m.classList.add('dragging');
+        });
+        m.addEventListener('dragend', () => m.classList.remove('dragging'));
+        // basic touch support: on touchstart we'll mark as dragging and keep a pointer
+        m.addEventListener('touchstart', e => {
+          if (!gameActive) return;
+          m.classList.add('dragging');
+          // create a small floating clone to follow touch
+          // We'll not implement full touch move here to keep logic simple,
+          // but touch users can tap to select then tap bucket: support via click event below.
+        }, { passive: true });
+      } else {
+        // AI marbles shouldn't be draggable
+        m.draggable = false;
+      }
+      // click/tap behavior for accessibility (tap marble then tap bucket)
+      m.addEventListener('click', e => {
+        if (!gameActive) return;
+        // mark selected for keyboard/tap mode
+        document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
+        m.classList.add('selected');
+        statusHuman.textContent = `Chọn bi ${c}. Nhấn vào lọ để thả.`;
+      });
+
+      container.appendChild(m);
+      return m;
+    }
+
+    /* animate fly copy from source element to target bucket */
+    function animateFly(m, target) {
+      try {
+        const rect = m.getBoundingClientRect();
+        const clone = m.cloneNode(true);
+        clone.classList.add('flying');
+        document.body.appendChild(clone);
+        clone.style.left = rect.left + 'px';
+        clone.style.top = rect.top + 'px';
+        clone.style.width = rect.width + 'px';
+        clone.style.height = rect.height + 'px';
+        clone.style.transformOrigin = 'center';
+        requestAnimationFrame(() => {
+          const t = target.getBoundingClientRect();
+          const dx = t.left + t.width / 2 - rect.left;
+          const dy = t.top + t.height / 2 - rect.top;
+          clone.style.transform = `translate(${dx}px, ${dy}px) scale(0.35)`;
+          clone.style.opacity = '0';
+        });
+        setTimeout(() => clone.remove(), 600);
+      } catch (e) { /* ignore animation errors */ }
+    }
+
+    /* DROP handlers for human buckets */
+    function setupDropHandlers() {
+      document.querySelectorAll('#boardHuman .bucket').forEach(bucket => {
+        bucket.addEventListener('dragover', e => {
+          if (gameActive) { e.preventDefault(); bucket.classList.add('highlight'); }
+        });
+        bucket.addEventListener('dragleave', () => bucket.classList.remove('highlight'));
+        bucket.addEventListener('drop', e => {
+          if (!gameActive) return;
+          e.preventDefault();
+          bucket.classList.remove('highlight');
+          // get id & color
+          let id = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('id');
+          const color = e.dataTransfer.getData('color');
+          // fallback: if player selected via click (touch), find selected marble
+          let el = document.querySelector(`.marble[data-id="${id}"]`);
+          if (!el) {
+            el = document.querySelector('.marble.selected');
+          }
+          if (!el) return;
+          const expected = bucket.dataset.color;
+          // Animate then append (append moves node)
+          animateFly(el, bucket);
+          setTimeout(() => {
+            if (expected === el.dataset.color) {
+              // correct
+              bucket.appendChild(el);
+              el.style.position = 'static';
+              el.style.transform = 'scale(0.7)';
+              el.style.margin = '2px';
+              // increment score & update
+              scoreHuman++;
+              scoreHumanEl.textContent = scoreHuman;
+              statusHuman.textContent = '✅ Đúng!';
+              soundCorrect && soundCorrect.play().catch(() => { });
+              updateBucketCounts('boardHuman');
+              // remove selection
+              el.classList.remove('selected');
+              // if reached win condition
+              if (scoreHuman >= MARBLES_TOTAL) { endGameEarly('player'); }
+            } else {
+              // wrong: return to tray (humanMarbles)
+              statusHuman.textContent = '❌ Sai!';
+              soundWrong && soundWrong.play().catch(() => { });
+              // ensure we re-add the original back to humanMarbles
+              setTimeout(() => {
+                if (document.body.contains(el)) humanMarbles.appendChild(el);
+                el.classList.remove('selected');
+                updateBucketCounts('boardHuman');
+              }, 250);
+            }
+          }, 220);
+        });
+
+        // support tap-to-drop: clicking bucket when a marble is selected (mobile)
+        bucket.addEventListener('click', e => {
+          if (!gameActive) return;
+          const sel = document.querySelector('.marble.selected');
+          if (!sel) return;
+          const expected = bucket.dataset.color;
+          animateFly(sel, bucket);
+          setTimeout(() => {
+            if (expected === sel.dataset.color) {
+              bucket.appendChild(sel);
+              sel.style.position = 'static';
+              sel.style.transform = 'scale(0.7)';
+              sel.style.margin = '2px';
+              scoreHuman++; scoreHumanEl.textContent = scoreHuman;
+              statusHuman.textContent = '✅ Đúng!';
+              soundCorrect && soundCorrect.play().catch(() => { });
+              if (scoreHuman >= MARBLES_TOTAL) endGameEarly('player');
+            } else {
+              statusHuman.textContent = '❌ Sai!';
+              soundWrong && soundWrong.play().catch(() => { });
+              humanMarbles.appendChild(sel);
+            }
+            sel.classList.remove('selected');
+            updateBucketCounts('boardHuman');
+          }, 220);
+        });
+      });
+    }
+
+    /* AI behavior: take marbles from aiMarbles sequentially into correct buckets */
+    function runAI() {
+      clearBuckets('boardAI'); // reset bucket contents (only bucket area)
+      const marbles = [...aiMarbles.querySelectorAll('.marble')];
+      scoreAI = 0; scoreAIEl.textContent = scoreAI;
+      let idx = 0;
+      statusAI.textContent = 'AI đang phân loại...';
+      // clear any previous timer
+      if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+      aiTimer = setInterval(() => {
+        if (!gameActive) { clearInterval(aiTimer); aiTimer = null; return; }
+        if (idx >= marbles.length) {
+          clearInterval(aiTimer); aiTimer = null; statusAI.textContent = 'AI xong'; return;
+        }
+        const m = marbles[idx++];
+        const c = m.dataset.color;
+        const bucket = document.querySelector(`#boardAI .bucket[data-color="${c}"]`);
+        if (bucket) {
+          animateFly(m, bucket);
+          // move after a tick so animation visible
+          setTimeout(() => {
+            bucket.appendChild(m);
+            m.style.position = 'static';
+            m.style.transform = 'scale(0.7)';
+            m.style.margin = '2px';
+            // update score & badge
+            scoreAI++;
+            scoreAIEl.textContent = scoreAI;
+            updateBucketCounts('boardAI');
+            if (scoreAI >= MARBLES_TOTAL) { endGameEarly('ai'); }
+          }, 260);
+        } else {
+          // if no bucket, just count as processed
+          scoreAI++; scoreAIEl.textContent = scoreAI;
+          if (scoreAI >= MARBLES_TOTAL) { endGameEarly('ai'); }
+        }
+      }, AI_SPEED);
+    }
+
+    /* Timer */
+    function startTimer(t = 30) {
+      remainingTime = t;
+      timeLeftEl.textContent = remainingTime;
+      if (mainTimer) clearInterval(mainTimer);
+      mainTimer = setInterval(() => {
+        remainingTime--;
+        timeLeftEl.textContent = remainingTime;
+        if (remainingTime <= 0) {
+          clearInterval(mainTimer);
+          mainTimer = null;
+          // stop AI
+          if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+          gameActive = false;
+          statusHuman.textContent = '⏹ Hết giờ!';
+          statusAI.textContent = '⏹ Hết giờ!';
+          showResult();
+        }
+      }, 1000);
+    }
+
+    /* End early when someone finishes */
+    function endGameEarly(winner) {
+      if (mainTimer) { clearInterval(mainTimer); mainTimer = null; }
+      if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+      gameActive = false;
+      if (winner === 'player') { statusHuman.textContent = '🎉 Hoàn thành!'; }
+      if (winner === 'ai') { statusAI.textContent = '🤖 Hoàn thành!'; }
+      showResult();
+    }
+
+    /* Show final overlay */
+    function showResult() {
+      overlay.style.display = 'flex';
+      let msg = `Bạn: ${scoreHuman} điểm | AI: ${scoreAI} điểm<br/>`;
+      if (scoreHuman > scoreAI) msg += "🎉 Bạn thắng!";
+      else if (scoreHuman < scoreAI) msg += "🤖 AI thắng!";
+      else msg += "⚖️ Hòa!";
+      resultText.innerHTML = msg;
+    }
+
+    function restart() {
+      overlay.style.display = 'none';
+      // stop timers
+      if (mainTimer) { clearInterval(mainTimer); mainTimer = null; }
+      if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+      // and re-trigger start
+      startBtn.click();
+    }
+    btnRestart.addEventListener('click', restart);
+
+    /* Start game */
+    startBtn.addEventListener('click', () => {
+      if (gameActive) {
+        // avoid multiple starts
+        return;
+      }
+      // set difficulty
+      const diff = difficultyEl.value;
+      if (diff === 'easy') { MARBLES_TOTAL = 5; AI_SPEED = 1200; TIME_LIMIT = 30; }
+      else if (diff === 'medium') { MARBLES_TOTAL = 6; AI_SPEED = 700; TIME_LIMIT = 30; }
+      else if (diff === 'hard') { MARBLES_TOTAL = 7; AI_SPEED = 400; TIME_LIMIT = 30; }
+
+      // reset state
+      scoreHuman = 0; scoreAI = 0;
+      scoreHumanEl.textContent = '0'; scoreAIEl.textContent = '0';
+      statusHuman.textContent = 'Bắt đầu'; statusAI.textContent = 'Chuẩn bị';
+      humanMarbles.innerHTML = ''; aiMarbles.innerHTML = '';
+      clearBuckets('boardHuman'); clearBuckets('boardAI');
+      gameActive = true;
+
+      // create fixed number of marbles for each side
+      for (let i = 0; i < MARBLES_TOTAL; i++) {
+        createMarble(humanMarbles);
+        createMarble(aiMarbles);
+      }
+
+      // update badges (initially 0)
+      updateBucketCounts('boardHuman');
+      updateBucketCounts('boardAI');
+
+      // attach drop handlers (re-attach is safe)
+      setupDropHandlers();
+
+      // start AI and timer
+      setTimeout(() => runAI(), 300);
+      startTimer(TIME_LIMIT);
+    });
+    function selectDifficulty(level) {
+        if (level === "easy") {
+          difficultyEl.value = "easy";
+        } else if (level === "medium") {
+          difficultyEl.value = "medium";
+        } else {
+          difficultyEl.value = "hard";
+        }
+
+        document.getElementById("difficultyModal").style.display = "none";
+        startBtn.click(); // chạy game theo độ khó
+      }
+
+    
+
+    /* initialize: set up a disabled preview state (not active) */
+    (function initPreview() {
+      // show a preview set but not active
+      humanMarbles.innerHTML = ''; aiMarbles.innerHTML = '';
+      for (let i = 0; i < 4; i++) { createMarble(humanMarbles); createMarble(aiMarbles); }
+      updateBucketCounts('boardHuman');
+      updateBucketCounts('boardAI');
+      // ensure drop handlers bound once
+      setupDropHandlers();
+    })();
+
+    /* accessibility: pressing ESC clears selected marble */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
+    });
+
+    // ensure overlay click outside popup doesn't close accidentally
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) { /* do nothing */ }
+    });
+
+  </script>
+</body>
+
+</html>
