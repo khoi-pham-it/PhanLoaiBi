@@ -365,6 +365,8 @@
   <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
   <script>
+    let aiStarted = false;
+
     /* ====== Touch Support cho Mobile/Tablet ====== */
       document.querySelectorAll('#humanMarbles, #boardHuman').forEach(container => {
         container.addEventListener('touchstart', e => {
@@ -529,6 +531,10 @@
           updateBucketCounts('boardHuman');
         }
         el.classList.remove('selected');
+        if (!aiStarted) {
+          aiStarted = true;
+          runAI();
+        }
       }, 220);
     }
 
@@ -656,6 +662,9 @@
 
     /* Start game */
     startBtn.addEventListener('click', () => {
+      aiStarted = false;
+      statusAI.textContent = "🤖 Đang chờ bạn...";
+      startTimer(TIME_LIMIT);
       if (gameActive) return;
       const diff = difficultyEl.value;
       if (diff === 'easy') { MARBLES_TOTAL = 5; AI_SPEED = 1200; TIME_LIMIT = 30; }
@@ -679,7 +688,7 @@
 
       setupDropHandlers();
 
-      setTimeout(() => runAI(), 300);
+      // setTimeout(() => runAI(), 300);
       startTimer(TIME_LIMIT);
     });
 
@@ -707,7 +716,7 @@
 
     // overlay click outside popup does nothing (avoid accidental close)
     overlay.addEventListener('click', e => { if (e.target === overlay) { /* do nothing */ } });
-
+    
   </script>
 </body>
 
