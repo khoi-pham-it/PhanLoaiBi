@@ -123,6 +123,8 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
       transition: transform .2s;
       user-select: none;
+      touch-action: none;
+      /* Thêm để hỗ trợ tốt hơn trên iOS/Safari */
     }
 
     .marble.red {
@@ -469,57 +471,71 @@
     let aiStarted = false;
     let currentMarble = null; // Lưu trữ viên bi đang được kéo
     let touchTimeout = null; // Timeout để debounce touch events
+    let touchStartX = 0; // Để hỗ trợ di chuyển mượt hơn trên iOS
+    let touchStartY = 0;
 
     /* ====== Touch Support cho Mobile/Tablet ====== */
-    document.querySelectorAll('#humanMarbles').forEach(container => {
-      container.addEventListener('touchstart', e => {
-        e.preventDefault(); // Ngăn hành vi mặc định của trình duyệt
-        if (!gameActive) return;
+    const humanMarblesContainer = document.getElementById('humanMarbles');
+    humanMarblesContainer.addEventListener('touchstart', e => {
+      e.preventDefault(); // Ngăn hành vi mặc định của trình duyệt
+      if (!gameActive) return;
 
-        const target = e.target.closest('.marble');
-        if (!target || target.parentElement.id !== 'humanMarbles') return;
+      const target = e.target.closest('.marble');
+      if (!target || target.parentElement.id !== 'humanMarbles') return;
 
-        // Chọn viên bi
-        document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
-        target.classList.add('selected', 'dragging');
-        currentMarble = target;
-        statusHuman.textContent = `Chọn bi ${target.dataset.color}. Kéo hoặc chạm vào lọ để thả.`;
-        lastTouchTime = Date.now();
-      }, { passive: false });
+      // Chọn viên bi
+      document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
+      target.classList.add('selected', 'dragging');
+      currentMarble = target;
+      statusHuman.textContent = `Chọn bi ${target.dataset.color}. Kéo hoặc chạm vào lọ để thả.`;
+      lastTouchTime = Date.now();
 
-      // Xử lý touchmove để di chuyển bi
-      container.addEventListener('touchmove', e => {
-        if (!gameActive || !currentMarble) return;
-        e.preventDefault(); // Ngăn cuộn trang
-        const touch = e.touches[0];
-        currentMarble.style.position = 'fixed';
-        currentMarble.style.left = `${touch.clientX - 18}px`; // Điều chỉnh vị trí tâm bi
-        currentMarble.style.top = `${touch.clientY - 18}px`;
-      }, { passive: false });
-    });
+      // Lưu vị trí ban đầu cho transform
+      const rect = target.getBoundingClientRect();
+      touchStartX = e.touches[0].clientX - rect.left;
+      touchStartY = e.touches[0].clientY - rect.top;
+      target.style.position = 'fixed';
+      target.style.zIndex = '1000';
+      target.style.left = `${rect.left}px`;
+      target.style.top = `${rect.top}px`;
+      target.style.transform = 'translate(0px, 0px)'; // Reset transform
+    }, { passive: false });
+
+    // Xử lý touchmove để di chuyển bi (sử dụng transform cho mượt mà hơn trên iOS)
+    document.addEventListener('touchmove', e => {
+      if (!gameActive || !currentMarble) return;
+      e.preventDefault(); // Ngăn cuộn trang
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartX - currentMarble.getBoundingClientRect().left + (currentMarble.offsetWidth / 2);
+      const dy = touch.clientY - touchStartY - currentMarble.getBoundingClientRect().top + (currentMarble.offsetHeight / 2);
+      currentMarble.style.transform = `translate(${dx}px, ${dy}px)`;
+    }, { passive: false });
 
     // Xử lý thả bi vào lọ
-    document.querySelectorAll('#boardHuman .bucket').forEach(bucket => {
-      bucket.addEventListener('touchend', e => {
-        e.preventDefault(); // Ngăn hành vi mặc định
-        if (!gameActive || !currentMarble) return;
+    document.addEventListener('touchend', e => {
+      if (!gameActive || !currentMarble) return;
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+      const bucket = targetElement ? targetElement.closest('#boardHuman .bucket') : null;
+      if (!bucket) {
+        // Nếu không thả vào bucket, reset vị trí
+        currentMarble.style.position = 'static';
+        currentMarble.style.transform = '';
+        currentMarble.style.zIndex = '';
+        currentMarble.classList.remove('dragging', 'selected');
+        currentMarble = null;
+        return;
+      }
 
-        const touch = e.changedTouches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (!target || !target.closest('.bucket') || target.closest('.bucket') !== bucket) return;
-
-        // Debounce để tránh xử lý kép
-        if (Date.now() - lastTouchTime < 300) return;
-
-        clearTimeout(touchTimeout);
-        touchTimeout = setTimeout(() => {
-          handleDrop(bucket, currentMarble);
-          currentMarble.style.position = 'static';
-          currentMarble.classList.remove('dragging');
-          currentMarble = null;
-        }, 50);
-      }, { passive: false });
-    });
+      // Xử lý drop
+      handleDrop(bucket, currentMarble);
+      currentMarble.style.position = 'static';
+      currentMarble.style.transform = '';
+      currentMarble.style.zIndex = '';
+      currentMarble.classList.remove('dragging', 'selected');
+      currentMarble = null;
+    }, { passive: false });
 
     /* ====== DOM refs ====== */
     const colors = ['red', 'yellow', 'blue'];
@@ -798,12 +814,12 @@
         clearInterval(aiTimer);
         aiTimer = null;
       }
-      startBtn.click();
+      startGame();
     }
     btnRestart.addEventListener('click', restart);
 
     /* Start game */
-    startBtn.addEventListener('click', () => {
+    function startGame() {
       aiStarted = false;
       statusAI.textContent = "🤖 Đang chờ bạn...";
       if (gameActive) return;
@@ -844,14 +860,16 @@
 
       setupDropHandlers();
       startTimer(TIME_LIMIT);
-    });
+    }
+
+    startBtn.addEventListener('click', startGame);
 
     function selectDifficulty(level) {
       if (level === "easy") difficultyEl.value = "easy";
       else if (level === "medium") difficultyEl.value = "medium";
       else difficultyEl.value = "hard";
       document.getElementById("difficultyModal").style.display = "none";
-      startBtn.click();
+      startGame(); // Gọi trực tiếp hàm startGame thay vì click button để tránh vấn đề trên mobile
     }
 
     /* initialize preview */
@@ -873,6 +891,7 @@
         document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
         if (currentMarble) {
           currentMarble.style.position = 'static';
+          currentMarble.style.transform = '';
           currentMarble.classList.remove('dragging');
           currentMarble = null;
         }
