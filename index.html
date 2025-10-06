@@ -260,6 +260,71 @@
     text-align: center;
   }
 }
+.difficulty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* trải đều trên chiều cao */
+  padding: 16px;
+  border-radius: 12px;
+  width: 200px;
+  min-height: 300px; /* đảm bảo cùng chiều cao */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.difficulty-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.difficulty-card h3 {
+  margin: 8px 0;
+  min-height: 40px; /* giữ đều chiều cao cho tiêu đề */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.difficulty-card p {
+  margin: 8px 0;
+  min-height: 32px; /* giữ chỗ cho dòng "Đã được huấn luyện..." */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.difficulty-card button {
+  margin-top: auto; /* đẩy nút xuống cuối card */
+}
+
+/* Hiệu ứng chung cho phần "Đã được huấn luyện trong" */
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translateY(0);
+    color: #ef4444; /* đỏ */
+  }
+  50% {
+    transform: translateY(-6px);
+    color: #facc15; /* vàng */
+  }
+}
+
+/* Nhịp riêng cho từng loại */
+.difficulty-card.easy p {
+  animation: floatGlow 1.5s ease-in-out infinite; /* nhanh */
+}
+
+.difficulty-card.medium p {
+  animation: floatGlow 2.2s ease-in-out infinite; /* vừa */
+}
+
+.difficulty-card.hard p {
+  animation: floatGlow 3s ease-in-out infinite;   /* chậm */
+}
+
 
   </style>
 </head>
@@ -276,23 +341,23 @@
           <img src="https://thumb.ac-illust.com/ec/ec7de22b20b117c9902b8aade7b999f9_t.jpeg" alt="Dễ"
             style="width:100px;height:100px;">
           <h3 style="color:green;">AI HỌC SINH (DỄ)</h3>
-          <p style="color:red">Đã được huấn luyện trong 1 ngày</p>
+          <p >Đã được huấn luyện trong 1 ngày</p>
           <button onclick="selectDifficulty('easy')">Chọn</button>
         </div>
         <div class="difficulty-card medium"
           style="border:3px solid blue; padding:12px; border-radius:12px; width:200px; text-align:center;">
           <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="Trung Bình"
             style="width:100px;height:100px;">
-          <h3 style="color:green;">AI TRƯỞNG THÀNH (BÌNH THƯỜNG)</h3>
-          <p style="color:red">Đã được huấn luyện trong 1 tuần</p>
+          <h3 style="color:green;">AI ĐẠI HỌC (THƯỜNG)</h3>
+          <p >Đã được huấn luyện trong 1 tuần</p>
           <button onclick="selectDifficulty('medium')">Chọn</button>
         </div>
         <div class="difficulty-card hard"
           style="border:3px solid red; padding:12px; border-radius:12px; width:200px; text-align:center;">
           <img src="https://i.pinimg.com/564x/0a/d0/c2/0ad0c2dcf22c5257a8bd6385c37aa100.jpg" alt="Khó"
             style="width:100px;height:100px;">
-          <h3 style="color:green;">AI LÃO LÀNG (SIÊU KHÓ)</h3>
-          <p style="color:red">Đã được huấn luyện trong 1 tháng</p>
+          <h3 style="color:green;">AI LÃO LÀNG (KHÓ)</h3>
+          <p >Đã được huấn luyện trong 1 tháng</p>
           <button onclick="selectDifficulty('hard')">Chọn</button>
         </div>
       </div>
@@ -365,6 +430,8 @@
   <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
   <script>
+    let lastTouchTime = 0;
+
     let aiStarted = false;
 
     /* ====== Touch Support cho Mobile/Tablet ====== */
@@ -463,6 +530,7 @@
         });
         m.addEventListener('dragend', () => m.classList.remove('dragging'));
         m.addEventListener('touchstart', e => {
+          lastTouchTime = Date.now();
           if (!gameActive) return;
           m.classList.add('dragging');
         }, { passive: true });
@@ -470,10 +538,12 @@
         // click/tap behavior for accessibility (tap marble then tap bucket)
         m.addEventListener('click', e => {
           if (!gameActive) return;
+          if (Date.now() - lastTouchTime < 400) return; // tránh click ảo
           document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
           m.classList.add('selected');
           statusHuman.textContent = `Chọn bi ${c}. Nhấn vào lọ để thả.`;
         });
+
       } else {
         m.draggable = false;
         // prevent AI marbles from being selectable by click
@@ -569,10 +639,12 @@
         // support tap-to-drop: clicking bucket when a marble is selected (mobile)
         bucket.addEventListener('click', e => {
           if (!gameActive) return;
+          if (Date.now() - lastTouchTime < 400) return; // tránh click ảo
           const sel = document.querySelector('.marble.selected');
           if (!sel) return;
           handleDrop(bucket, sel);
         });
+
       });
     }
 
