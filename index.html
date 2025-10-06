@@ -192,140 +192,174 @@
         height: 28px;
       }
     }
+
     /* Thêm màu nền cho từng loại lọ */
-.bucket[data-color="red"] {
-  background: linear-gradient(180deg, #f87171, #991b1b); /* đỏ nhạt -> đỏ đậm */
-}
+    .bucket[data-color="red"] {
+      background: linear-gradient(180deg, #f87171, #991b1b);
+      /* đỏ nhạt -> đỏ đậm */
+    }
 
-.bucket[data-color="yellow"] {
-  background: linear-gradient(180deg, #fde047, #ca8a04); /* vàng nhạt -> vàng đậm */
-}
+    .bucket[data-color="yellow"] {
+      background: linear-gradient(180deg, #fde047, #ca8a04);
+      /* vàng nhạt -> vàng đậm */
+    }
 
-.bucket[data-color="blue"] {
-  background: linear-gradient(180deg, #60a5fa, #1e3a8a); /* xanh nhạt -> xanh đậm */
-}
-.bucket[data-color="red"] { border: 3px solid #ef4444; }
-.bucket[data-color="yellow"] { border: 3px solid #facc15; }
-.bucket[data-color="blue"] { border: 3px solid #3b82f6; }
-/* ====== Responsive ====== */
-@media (max-width: 1024px) {
-  .boardWrap {
-    flex-direction: column;
-    gap: 20px;
-  }
-  .side {
-    width: 100%;
-  }
-}
+    .bucket[data-color="blue"] {
+      background: linear-gradient(180deg, #60a5fa, #1e3a8a);
+      /* xanh nhạt -> xanh đậm */
+    }
 
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .board {
-    height: auto;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 10px;
-  }
-  .bucket {
-    width: 80px;
-    height: 120px;
-  }
-  .marble {
-    width: 28px;
-    height: 28px;
-  }
-}
+    .bucket[data-color="red"] {
+      border: 3px solid #ef4444;
+    }
 
-@media (max-width: 480px) {
-  body {
-    padding: 12px;
-  }
-  h1 {
-    font-size: 16px;
-  }
-  .bucket {
-    width: 60px;
-    height: 100px;
-  }
-  .marble {
-    width: 24px;
-    height: 24px;
-  }
-  .footer {
-    font-size: 12px;
-    text-align: center;
-  }
-}
-.difficulty-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between; /* trải đều trên chiều cao */
-  padding: 16px;
-  border-radius: 12px;
-  width: 200px;
-  min-height: 300px; /* đảm bảo cùng chiều cao */
-  text-align: center;
-  box-sizing: border-box;
-}
+    .bucket[data-color="yellow"] {
+      border: 3px solid #facc15;
+    }
 
-.difficulty-card img {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  margin-bottom: 10px;
-}
+    .bucket[data-color="blue"] {
+      border: 3px solid #3b82f6;
+    }
 
-.difficulty-card h3 {
-  margin: 8px 0;
-  min-height: 40px; /* giữ đều chiều cao cho tiêu đề */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    /* ====== Responsive ====== */
+    @media (max-width: 1024px) {
+      .boardWrap {
+        flex-direction: column;
+        gap: 20px;
+      }
 
-.difficulty-card p {
-  margin: 8px 0;
-  min-height: 32px; /* giữ chỗ cho dòng "Đã được huấn luyện..." */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+      .side {
+        width: 100%;
+      }
+    }
 
-.difficulty-card button {
-  margin-top: auto; /* đẩy nút xuống cuối card */
-}
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
 
-/* Hiệu ứng chung cho phần "Đã được huấn luyện trong" */
-@keyframes floatGlow {
-  0%, 100% {
-    transform: translateY(0);
-    color: #ef4444; /* đỏ */
-  }
-  50% {
-    transform: translateY(-6px);
-    color: #facc15; /* vàng */
-  }
-}
+      .board {
+        height: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px;
+      }
 
-/* Nhịp riêng cho từng loại */
-.difficulty-card.easy p {
-  animation: floatGlow 1.5s ease-in-out infinite; /* nhanh */
-}
+      .bucket {
+        width: 80px;
+        height: 120px;
+      }
 
-.difficulty-card.medium p {
-  animation: floatGlow 2.2s ease-in-out infinite; /* vừa */
-}
+      .marble {
+        width: 28px;
+        height: 28px;
+      }
+    }
 
-.difficulty-card.hard p {
-  animation: floatGlow 3s ease-in-out infinite;   /* chậm */
-}
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
 
+      h1 {
+        font-size: 16px;
+      }
 
+      .bucket {
+        width: 60px;
+        height: 100px;
+      }
+
+      .marble {
+        width: 24px;
+        height: 24px;
+      }
+
+      .footer {
+        font-size: 12px;
+        text-align: center;
+      }
+    }
+
+    .difficulty-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      /* trải đều trên chiều cao */
+      padding: 16px;
+      border-radius: 12px;
+      width: 200px;
+      min-height: 300px;
+      /* đảm bảo cùng chiều cao */
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .difficulty-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .difficulty-card h3 {
+      margin: 8px 0;
+      min-height: 40px;
+      /* giữ đều chiều cao cho tiêu đề */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .difficulty-card p {
+      margin: 8px 0;
+      min-height: 32px;
+      /* giữ chỗ cho dòng "Đã được huấn luyện..." */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .difficulty-card button {
+      margin-top: auto;
+      /* đẩy nút xuống cuối card */
+    }
+
+    /* Hiệu ứng chung cho phần "Đã được huấn luyện trong" */
+    @keyframes floatGlow {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        color: #ef4444;
+        /* đỏ */
+      }
+
+      50% {
+        transform: translateY(-6px);
+        color: #facc15;
+        /* vàng */
+      }
+    }
+
+    /* Nhịp riêng cho từng loại */
+    .difficulty-card.easy p {
+      animation: floatGlow 1.5s ease-in-out infinite;
+      /* nhanh */
+    }
+
+    .difficulty-card.medium p {
+      animation: floatGlow 2.2s ease-in-out infinite;
+      /* vừa */
+    }
+
+    .difficulty-card.hard p {
+      animation: floatGlow 3s ease-in-out infinite;
+      /* chậm */
+    }
   </style>
 </head>
 
@@ -341,7 +375,7 @@
           <img src="https://thumb.ac-illust.com/ec/ec7de22b20b117c9902b8aade7b999f9_t.jpeg" alt="Dễ"
             style="width:100px;height:100px;">
           <h3 style="color:green;">AI HỌC SINH (DỄ)</h3>
-          <p >Đã được huấn luyện trong 1 ngày</p>
+          <p>Đã được huấn luyện trong 1 ngày</p>
           <button onclick="selectDifficulty('easy')">Chọn</button>
         </div>
         <div class="difficulty-card medium"
@@ -349,7 +383,7 @@
           <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="Trung Bình"
             style="width:100px;height:100px;">
           <h3 style="color:green;">AI ĐẠI HỌC (THƯỜNG)</h3>
-          <p >Đã được huấn luyện trong 1 tuần</p>
+          <p>Đã được huấn luyện trong 1 tuần</p>
           <button onclick="selectDifficulty('medium')">Chọn</button>
         </div>
         <div class="difficulty-card hard"
@@ -357,7 +391,7 @@
           <img src="https://i.pinimg.com/564x/0a/d0/c2/0ad0c2dcf22c5257a8bd6385c37aa100.jpg" alt="Khó"
             style="width:100px;height:100px;">
           <h3 style="color:green;">AI LÃO LÀNG (KHÓ)</h3>
-          <p >Đã được huấn luyện trong 1 tháng</p>
+          <p>Đã được huấn luyện trong 1 tháng</p>
           <button onclick="selectDifficulty('hard')">Chọn</button>
         </div>
       </div>
@@ -429,35 +463,63 @@
   <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
+  <!-- HTML và CSS giữ nguyên như code gốc -->
   <script>
     let lastTouchTime = 0;
-
     let aiStarted = false;
+    let currentMarble = null; // Lưu trữ viên bi đang được kéo
+    let touchTimeout = null; // Timeout để debounce touch events
 
     /* ====== Touch Support cho Mobile/Tablet ====== */
-      document.querySelectorAll('#humanMarbles, #boardHuman').forEach(container => {
-        container.addEventListener('touchstart', e => {
-          if (!gameActive) return;
+    document.querySelectorAll('#humanMarbles').forEach(container => {
+      container.addEventListener('touchstart', e => {
+        e.preventDefault(); // Ngăn hành vi mặc định của trình duyệt
+        if (!gameActive) return;
 
-          const target = e.target.closest('.marble, .bucket');
-          if (!target) return;
+        const target = e.target.closest('.marble');
+        if (!target || target.parentElement.id !== 'humanMarbles') return;
 
-          // Nếu chạm vào 1 viên bi => chọn nó
-          if (target.classList.contains('marble') && target.parentElement.id === 'humanMarbles') {
-            document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
-            target.classList.add('selected');
-            statusHuman.textContent = `Chọn bi ${target.dataset.color}. Chạm vào lọ để thả.`;
-          }
+        // Chọn viên bi
+        document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
+        target.classList.add('selected', 'dragging');
+        currentMarble = target;
+        statusHuman.textContent = `Chọn bi ${target.dataset.color}. Kéo hoặc chạm vào lọ để thả.`;
+        lastTouchTime = Date.now();
+      }, { passive: false });
 
-          // Nếu chạm vào 1 lọ và đã có viên bi được chọn => thả vào
-          if (target.classList.contains('bucket')) {
-            const selected = document.querySelector('.marble.selected');
-            if (selected) {
-              handleDrop(target, selected);
-            }
-          }
-        }, { passive: true });
-      });
+      // Xử lý touchmove để di chuyển bi
+      container.addEventListener('touchmove', e => {
+        if (!gameActive || !currentMarble) return;
+        e.preventDefault(); // Ngăn cuộn trang
+        const touch = e.touches[0];
+        currentMarble.style.position = 'fixed';
+        currentMarble.style.left = `${touch.clientX - 18}px`; // Điều chỉnh vị trí tâm bi
+        currentMarble.style.top = `${touch.clientY - 18}px`;
+      }, { passive: false });
+    });
+
+    // Xử lý thả bi vào lọ
+    document.querySelectorAll('#boardHuman .bucket').forEach(bucket => {
+      bucket.addEventListener('touchend', e => {
+        e.preventDefault(); // Ngăn hành vi mặc định
+        if (!gameActive || !currentMarble) return;
+
+        const touch = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (!target || !target.closest('.bucket') || target.closest('.bucket') !== bucket) return;
+
+        // Debounce để tránh xử lý kép
+        if (Date.now() - lastTouchTime < 300) return;
+
+        clearTimeout(touchTimeout);
+        touchTimeout = setTimeout(() => {
+          handleDrop(bucket, currentMarble);
+          currentMarble.style.position = 'static';
+          currentMarble.classList.remove('dragging');
+          currentMarble = null;
+        }, 50);
+      }, { passive: false });
+    });
 
     /* ====== DOM refs ====== */
     const colors = ['red', 'yellow', 'blue'];
@@ -478,7 +540,7 @@
 
     /* ====== state ====== */
     let MARBLES_TOTAL = 6;
-    let AI_SPEED = 700; // ms between AI moves
+    let AI_SPEED = 700;
     let TIME_LIMIT = 30;
     let scoreHuman = 0, scoreAI = 0;
     let gameActive = false;
@@ -488,7 +550,7 @@
     /* helper: uid */
     function uid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
-    /* update bucket counts for a given board (boardId: 'boardHuman'|'boardAI') */
+    /* update bucket counts */
     function updateBucketCounts(boardId) {
       const buckets = document.querySelectorAll(`#${boardId} .bucket`);
       buckets.forEach(b => {
@@ -508,7 +570,7 @@
       });
     }
 
-    /* create a marble in given container (humanMarbles or aiMarbles) */
+    /* create a marble */
     function createMarble(container, color = null) {
       const c = color || colors[Math.floor(Math.random() * colors.length)];
       const m = document.createElement('div');
@@ -519,7 +581,6 @@
       m.setAttribute('role', 'button');
       m.setAttribute('aria-label', `Bi ${c}`);
 
-      // Only human marbles are draggable and selectable
       if (container === humanMarbles) {
         m.draggable = true;
         m.addEventListener('dragstart', e => {
@@ -528,32 +589,19 @@
           e.dataTransfer.setData('color', c);
           m.classList.add('dragging');
         });
-        m.addEventListener('dragend', () => m.classList.remove('dragging'));
-        m.addEventListener('touchstart', e => {
-          lastTouchTime = Date.now();
-          if (!gameActive) return;
-          m.classList.add('dragging');
-        }, { passive: true });
-
-        // click/tap behavior for accessibility (tap marble then tap bucket)
-        m.addEventListener('click', e => {
-          if (!gameActive) return;
-          if (Date.now() - lastTouchTime < 400) return; // tránh click ảo
-          document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
-          m.classList.add('selected');
-          statusHuman.textContent = `Chọn bi ${c}. Nhấn vào lọ để thả.`;
+        m.addEventListener('dragend', () => {
+          m.classList.remove('dragging');
+          m.style.position = 'static';
         });
-
       } else {
         m.draggable = false;
-        // prevent AI marbles from being selectable by click
       }
 
       container.appendChild(m);
       return m;
     }
 
-    /* animate fly copy from source element to target bucket */
+    /* animate fly */
     function animateFly(m, target) {
       try {
         const rect = m.getBoundingClientRect();
@@ -596,7 +644,6 @@
         } else {
           statusHuman.textContent = '❌ Sai!';
           soundWrong && soundWrong.play().catch(() => { });
-          // return to tray
           humanMarbles.appendChild(el);
           updateBucketCounts('boardHuman');
         }
@@ -610,57 +657,56 @@
 
     /* DROP handlers for human buckets */
     function setupDropHandlers() {
-      // remove previous listeners by cloning nodes (safe simple reset)
       document.querySelectorAll('#boardHuman .bucket').forEach((bucket, i) => {
-        // ensure no duplicate handlers: replace with clone
         const newBucket = bucket.cloneNode(true);
         bucket.parentNode.replaceChild(newBucket, bucket);
       });
 
       document.querySelectorAll('#boardHuman .bucket').forEach(bucket => {
         bucket.addEventListener('dragover', e => {
-          if (gameActive) { e.preventDefault(); bucket.classList.add('highlight'); }
+          if (gameActive) {
+            e.preventDefault();
+            bucket.classList.add('highlight');
+          }
         });
         bucket.addEventListener('dragleave', () => bucket.classList.remove('highlight'));
-
         bucket.addEventListener('drop', e => {
           if (!gameActive) return;
           e.preventDefault();
           bucket.classList.remove('highlight');
 
           let id = e.dataTransfer.getData('text/plain');
-          // fallback: if player selected via click (touch), find selected marble
           let el = document.querySelector(`.marble[data-id="${id}"]`) || document.querySelector('.marble.selected');
           if (!el) return;
 
           handleDrop(bucket, el);
         });
-
-        // support tap-to-drop: clicking bucket when a marble is selected (mobile)
-        bucket.addEventListener('click', e => {
-          if (!gameActive) return;
-          if (Date.now() - lastTouchTime < 400) return; // tránh click ảo
-          const sel = document.querySelector('.marble.selected');
-          if (!sel) return;
-          handleDrop(bucket, sel);
-        });
-
       });
     }
 
-    /* AI behavior: take marbles from aiMarbles sequentially into correct buckets */
+    /* AI behavior */
     function runAI() {
-      // clear any bucket content in AI board (not aiMarbles)
       clearBuckets('boardAI');
       const marbles = [...aiMarbles.querySelectorAll('.marble')];
-      scoreAI = 0; scoreAIEl.textContent = scoreAI;
+      scoreAI = 0;
+      scoreAIEl.textContent = scoreAI;
       let idx = 0;
       statusAI.textContent = 'AI đang phân loại...';
-      if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+      if (aiTimer) {
+        clearInterval(aiTimer);
+        aiTimer = null;
+      }
       aiTimer = setInterval(() => {
-        if (!gameActive) { clearInterval(aiTimer); aiTimer = null; return; }
+        if (!gameActive) {
+          clearInterval(aiTimer);
+          aiTimer = null;
+          return;
+        }
         if (idx >= marbles.length) {
-          clearInterval(aiTimer); aiTimer = null; statusAI.textContent = 'AI xong'; return;
+          clearInterval(aiTimer);
+          aiTimer = null;
+          statusAI.textContent = 'AI xong';
+          return;
         }
         const m = marbles[idx++];
         const c = m.dataset.color;
@@ -675,11 +721,16 @@
             scoreAI++;
             scoreAIEl.textContent = scoreAI;
             updateBucketCounts('boardAI');
-            if (scoreAI >= MARBLES_TOTAL) { endGameEarly('ai'); }
+            if (scoreAI >= MARBLES_TOTAL) {
+              endGameEarly('ai');
+            }
           }, 260);
         } else {
-          scoreAI++; scoreAIEl.textContent = scoreAI;
-          if (scoreAI >= MARBLES_TOTAL) { endGameEarly('ai'); }
+          scoreAI++;
+          scoreAIEl.textContent = scoreAI;
+          if (scoreAI >= MARBLES_TOTAL) {
+            endGameEarly('ai');
+          }
         }
       }, AI_SPEED);
     }
@@ -695,7 +746,10 @@
         if (remainingTime <= 0) {
           clearInterval(mainTimer);
           mainTimer = null;
-          if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+          if (aiTimer) {
+            clearInterval(aiTimer);
+            aiTimer = null;
+          }
           gameActive = false;
           statusHuman.textContent = '⏹ Hết giờ!';
           statusAI.textContent = '⏹ Hết giờ!';
@@ -704,17 +758,27 @@
       }, 1000);
     }
 
-    /* End early when someone finishes */
+    /* End early */
     function endGameEarly(winner) {
-      if (mainTimer) { clearInterval(mainTimer); mainTimer = null; }
-      if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+      if (mainTimer) {
+        clearInterval(mainTimer);
+        mainTimer = null;
+      }
+      if (aiTimer) {
+        clearInterval(aiTimer);
+        aiTimer = null;
+      }
       gameActive = false;
-      if (winner === 'player') { statusHuman.textContent = '🎉 Hoàn thành!'; }
-      if (winner === 'ai') { statusAI.textContent = '🤖 Hoàn thành!'; }
+      if (winner === 'player') {
+        statusHuman.textContent = '🎉 Hoàn thành!';
+      }
+      if (winner === 'ai') {
+        statusAI.textContent = '🤖 Hoàn thành!';
+      }
       showResult();
     }
 
-    /* Show final overlay */
+    /* Show result */
     function showResult() {
       overlay.style.display = 'flex';
       let msg = `Bạn: ${scoreHuman} điểm | AI: ${scoreAI} điểm<br/>`;
@@ -726,8 +790,14 @@
 
     function restart() {
       overlay.style.display = 'none';
-      if (mainTimer) { clearInterval(mainTimer); mainTimer = null; }
-      if (aiTimer) { clearInterval(aiTimer); aiTimer = null; }
+      if (mainTimer) {
+        clearInterval(mainTimer);
+        mainTimer = null;
+      }
+      if (aiTimer) {
+        clearInterval(aiTimer);
+        aiTimer = null;
+      }
       startBtn.click();
     }
     btnRestart.addEventListener('click', restart);
@@ -736,18 +806,32 @@
     startBtn.addEventListener('click', () => {
       aiStarted = false;
       statusAI.textContent = "🤖 Đang chờ bạn...";
-      startTimer(TIME_LIMIT);
       if (gameActive) return;
       const diff = difficultyEl.value;
-      if (diff === 'easy') { MARBLES_TOTAL = 5; AI_SPEED = 1200; TIME_LIMIT = 30; }
-      else if (diff === 'medium') { MARBLES_TOTAL = 6; AI_SPEED = 700; TIME_LIMIT = 30; }
-      else if (diff === 'hard') { MARBLES_TOTAL = 7; AI_SPEED = 400; TIME_LIMIT = 30; }
+      if (diff === 'easy') {
+        MARBLES_TOTAL = 5;
+        AI_SPEED = 1200;
+        TIME_LIMIT = 30;
+      } else if (diff === 'medium') {
+        MARBLES_TOTAL = 6;
+        AI_SPEED = 700;
+        TIME_LIMIT = 30;
+      } else if (diff === 'hard') {
+        MARBLES_TOTAL = 7;
+        AI_SPEED = 400;
+        TIME_LIMIT = 30;
+      }
 
-      scoreHuman = 0; scoreAI = 0;
-      scoreHumanEl.textContent = '0'; scoreAIEl.textContent = '0';
-      statusHuman.textContent = 'Bắt đầu'; statusAI.textContent = 'Chuẩn bị';
-      humanMarbles.innerHTML = ''; aiMarbles.innerHTML = '';
-      clearBuckets('boardHuman'); clearBuckets('boardAI');
+      scoreHuman = 0;
+      scoreAI = 0;
+      scoreHumanEl.textContent = '0';
+      scoreAIEl.textContent = '0';
+      statusHuman.textContent = 'Bắt đầu';
+      statusAI.textContent = 'Chuẩn bị';
+      humanMarbles.innerHTML = '';
+      aiMarbles.innerHTML = '';
+      clearBuckets('boardHuman');
+      clearBuckets('boardAI');
       gameActive = true;
 
       for (let i = 0; i < MARBLES_TOTAL; i++) {
@@ -759,8 +843,6 @@
       updateBucketCounts('boardAI');
 
       setupDropHandlers();
-
-      // setTimeout(() => runAI(), 300);
       startTimer(TIME_LIMIT);
     });
 
@@ -774,8 +856,12 @@
 
     /* initialize preview */
     (function initPreview() {
-      humanMarbles.innerHTML = ''; aiMarbles.innerHTML = '';
-      for (let i = 0; i < 4; i++) { createMarble(humanMarbles); createMarble(aiMarbles); }
+      humanMarbles.innerHTML = '';
+      aiMarbles.innerHTML = '';
+      for (let i = 0; i < 4; i++) {
+        createMarble(humanMarbles);
+        createMarble(aiMarbles);
+      }
       updateBucketCounts('boardHuman');
       updateBucketCounts('boardAI');
       setupDropHandlers();
@@ -783,12 +869,20 @@
 
     /* accessibility: ESC clears selection */
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
+        if (currentMarble) {
+          currentMarble.style.position = 'static';
+          currentMarble.classList.remove('dragging');
+          currentMarble = null;
+        }
+      }
     });
 
-    // overlay click outside popup does nothing (avoid accidental close)
-    overlay.addEventListener('click', e => { if (e.target === overlay) { /* do nothing */ } });
-    
+    // overlay click outside popup does nothing
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) { /* do nothing */ }
+    });
   </script>
 </body>
 
