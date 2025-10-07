@@ -68,6 +68,10 @@
       color: #7dd3fc;
       margin-bottom: 15px;
       font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     .board {
@@ -267,18 +271,20 @@
       text-align: center;
       box-sizing: border-box;
       position: relative;
+      gap: 10px;
     }
 
     .difficulty-card img {
       width: 100px;
       height: 120px;
-      object-fit: contain;
+      /* object-fit: contain; */
       margin-bottom: 10px;
+      margin: 4px 0;
       /* padding-top: 30px; */
     }
 
     .difficulty-card h3 {
-      margin: 8px 0;
+      margin: 1px 1px;
       min-height: 40px;
       /* display: flex; */
       align-items: center;
@@ -286,7 +292,7 @@
     }
 
     .difficulty-card p {
-      margin: 8px 0;
+      margin: 2px 2px;
       min-height: 32px;
       /* display: flex; */
       align-items: center;
@@ -329,17 +335,17 @@
 
     .difficulty-card.easy button {
       background: #22c55e;
-      width: 150px;
+      width: 200px;
     }
 
     .difficulty-card.medium button {
       background: #3b82f6;
-      width: 150px;
+      width: 200px;
     }
 
     .difficulty-card.hard button {
       background: #ef4444;
-      width: 150px;
+      width: 200px;
     }
 
     @keyframes floatGlowEasy {
@@ -387,42 +393,54 @@
         color: #dc2626;
       }
     }
+
     @keyframes shineFlashe {
-    0%, 100% {
-      color: #05f932;
-      text-shadow: none;
-      transform: scale(1);
+
+      0%,
+      100% {
+        color: #05f932;
+        text-shadow: none;
+        transform: scale(1);
+      }
+
+      50% {
+        color: #2c561e;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        transform: scale(1.1);
+      }
     }
-    50% {
-      color: #2c561e;
-      text-shadow: 0 0 10px rgba(255,255,255,0.8);
-      transform: scale(1.1);
+
+    @keyframes shineFlashm {
+
+      0%,
+      100% {
+        color: #1f06ff;
+        text-shadow: none;
+        transform: scale(1);
+      }
+
+      50% {
+        color: #191a3d;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        transform: scale(1.1);
+      }
     }
-  }
-  @keyframes shineFlashm {
-    0%, 100% {
-      color: #1f0db8;
-      text-shadow: none;
-      transform: scale(1);
+
+    @keyframes shineFlashh {
+
+      0%,
+      100% {
+        color: #fa4242;
+        text-shadow: none;
+        transform: scale(1);
+      }
+
+      50% {
+        color: #52271a;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        transform: scale(1.1);
+      }
     }
-    50% {
-      color: #191a3d;
-      text-shadow: 0 0 10px rgba(255,255,255,0.8);
-      transform: scale(1.1);
-    }
-  }
-  @keyframes shineFlashh {
-    0%, 100% {
-      color: #dd1c1c;
-      text-shadow: none;
-      transform: scale(1);
-    }
-    50% {
-      color: #52271a;
-      text-shadow: 0 0 10px rgba(255,255,255,0.8);
-      transform: scale(1.1);
-    }
-  }
 
     .difficulty-card.easy p {
       animation: floatGlowEasy 3s ease-in-out infinite;
@@ -435,16 +453,17 @@
     .difficulty-card.hard p {
       animation: floatGlowHard 3s ease-in-out infinite;
     }
+
     .difficulty-card.easy h3 {
-      animation: shineFlashe  2s ease-in-out infinite;
+      animation: shineFlashe 2s ease-in-out infinite;
     }
 
     .difficulty-card.medium h3 {
-      animation: shineFlashm  2s ease-in-out infinite;
+      animation: shineFlashm 2s ease-in-out infinite;
     }
 
     .difficulty-card.hard h3 {
-      animation: shineFlashh  2s ease-in-out infinite;
+      animation: shineFlashh 2s ease-in-out infinite;
     }
   </style>
 </head>
@@ -454,32 +473,39 @@
     style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); z-index:999;">
     <div class="modal-content" style="background:#fff;border-radius:15px;padding:15px 30px;max-width:900px;">
       <h2 style="color: red;"> Chọn bạn 'AI' để thi đấu</h2>
-      <div style="display:flex; gap:5px; justify-content:center; flex-wrap:wrap;">
+      <div style="display:flex; gap:2px; justify-content:center; flex-wrap:wrap;">
         <div class="difficulty-card easy"
           style="border:3px solid green; padding:15px; border-radius:12px; width:280px; text-align:center;">
           <span class="difficulty-title">DỄ</span>
           <img src="https://thumb.ac-illust.com/ec/ec7de22b20b117c9902b8aade7b999f9_t.jpeg" alt="Dễ"
-            style="width:100px;height:100px;">
-          <h3 style="color:green;">AI HỌC SINH</h3>
-          <p>Đã được huấn luyện trong 1 ngày</p>
+            style="width:200px;height:200px;">
+            <div><h3 style="color:green;">AI HỌC SINH</h3>
+            <p>Đã được huấn luyện trong 1 ngày</p>
+          </div>
+          
           <button onclick="selectDifficulty('easy')">Chọn</button>
         </div>
         <div class="difficulty-card medium"
           style="border:3px solid blue; padding:15px; border-radius:12px; width:280px; text-align:center;">
           <span class="difficulty-title">TRUNG BÌNH</span>
           <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="Trung Bình"
-            style="width:100px;height:100px;">
-          <h3 style="color:blue;">AI ĐẠI HỌC</h3>
-          <p>Đã được huấn luyện trong 1 tuần</p>
+            style="width:200px;height:200px;">
+            <div>
+              <h3 style="color:blue;">AI ĐẠI HỌC</h3>
+              <p>Đã được huấn luyện trong 1 tuần</p>
+            </div>
+          
           <button onclick="selectDifficulty('medium')">Chọn</button>
         </div>
         <div class="difficulty-card hard"
           style="border:3px solid red; padding:15px; border-radius:12px; width:280px; text-align:center;">
           <span class="difficulty-title">KHÓ</span>
           <img src="https://i.pinimg.com/564x/0a/d0/c2/0ad0c2dcf22c5257a8bd6385c37aa100.jpg" alt="Khó"
-            style="width:100px;height:100px;">
-          <h3 style="color:red;">AI LÃO LÀNG</h3>
-          <p>Đã được huấn luyện trong 1 tháng</p>
+            style="width:200px;height:200px;">
+            <div>
+              <h3 style="color:red;">AI LÃO LÀNG</h3>
+              <p>Đã được huấn luyện trong 1 tháng</p>
+            </div>
           <button onclick="selectDifficulty('hard')">Chọn</button>
         </div>
       </div>
@@ -490,19 +516,13 @@
     <header>
       <h1>Phân loại bi màu — Người chơi vs AI</h1>
       <div>
-        <select id="difficulty">
-          <option value="easy">Dễ</option>
-          <option value="medium" selected>Trung bình</option>
-          <option value="hard">Khó</option>
-        </select>
-        <button id="startBtn">Bắt đầu</button>
         <span class="timer">⏱ <span id="timeLeft">30</span>s</span>
       </div>
     </header>
 
     <section class="game">
       <div class="side-panel" id="playerPanel">
-        <h2>NGƯỜI CHƠI</h2>
+        <h2 style="color: #6fff00;">NGƯỜI CHƠI</h2>
         <div class="board" id="boardHuman">
           <div class="bucket" data-color="red"><span>Đỏ</span>
             <div class="count">0</div>
@@ -559,6 +579,10 @@
     let timerStarted = false; // Biến để kiểm tra xem bộ đếm thời gian đã bắt đầu chưa
     let gameStartTime = null; // Thời gian bắt đầu game
     let aiFinishTime = null; // Thời gian AI hoàn thành
+    let aiName = '';
+    let aiImg = '';
+    let aiColor = '';
+    let currentDifficulty = 'medium';
 
     const humanMarblesContainer = document.getElementById('humanMarbles');
     humanMarblesContainer.addEventListener('touchstart', e => {
@@ -623,8 +647,6 @@
     const scoreAIEl = document.getElementById('scoreAI');
     const statusHuman = document.getElementById('statusHuman');
     const statusAI = document.getElementById('statusAI');
-    const startBtn = document.getElementById('startBtn');
-    const difficultyEl = document.getElementById('difficulty');
     const timeLeftEl = document.getElementById('timeLeft');
     const overlay = document.getElementById('overlay');
     const resultText = document.getElementById('resultText');
@@ -859,7 +881,7 @@
       overlay.style.display = 'flex';
       const playerFinishTime = gameActive ? (Date.now() - gameStartTime) : (TIME_LIMIT * 1000 - remainingTime * 1000); // Thời gian người chơi hoàn thành
       const aiTime = aiFinishTime ? (aiFinishTime - gameStartTime) : Infinity; // Nếu AI chưa hoàn thành, thời gian là Infinity
-      let msg = `Bạn: ${Math.floor(playerFinishTime / 1000)} giây | AI: ${aiFinishTime ? Math.floor(aiTime / 1000 ) +' giây' : 'Chưa hoàn thành'}<br/>`;
+      let msg = `Bạn: ${Math.floor(playerFinishTime / 1000)} giây | AI: ${aiFinishTime ? Math.floor(aiTime / 1000) + ' giây' : 'Chưa hoàn thành'}<br/>`;
       if (scoreHuman >= MARBLES_TOTAL && (!aiFinishTime || playerFinishTime < aiTime)) msg += "🎉 Bạn thắng!";
       else if (aiFinishTime && aiTime < playerFinishTime) msg += "🤖 AI thắng!";
       else if (playerFinishTime >= TIME_LIMIT * 1000 && !aiFinishTime) msg += "⚖️ Hòa!";
@@ -881,7 +903,7 @@
       timerStarted = false; // Reset trạng thái bộ đếm thời gian
       gameStartTime = null; // Reset thời gian bắt đầu
       aiFinishTime = null; // Reset thời gian AI hoàn thành
-      startGame();
+      document.getElementById("difficultyModal").style.display = "flex";
     }
     btnRestart.addEventListener('click', restart);
 
@@ -890,7 +912,7 @@
       timerStarted = false; // Reset trạng thái bộ đếm thời gian
       statusAI.textContent = "🤖 Đang chờ bạn...";
       if (gameActive) return;
-      const diff = difficultyEl.value;
+      const diff = currentDifficulty;
       if (diff === 'easy') {
         MARBLES_TOTAL = 5;
         AI_SPEED = 1200;
@@ -904,6 +926,11 @@
         AI_SPEED = 400;
         TIME_LIMIT = 30;
       }
+
+      // Cập nhật tiêu đề AI với tên, ảnh và màu
+      const aiHeader = document.querySelector('#aiPanel h2');
+      aiHeader.innerHTML = `AI ${aiName} <img src="${aiImg}" alt="${aiName}" style="width:50px; height:50px; border-radius:50%;">`;
+      aiHeader.style.color = aiColor;
 
       scoreHuman = 0;
       scoreAI = 0;
@@ -929,12 +956,21 @@
       timeLeftEl.textContent = TIME_LIMIT; // Hiển thị thời gian ban đầu nhưng chưa bắt đầu đếm ngược
     }
 
-    startBtn.addEventListener('click', startGame);
-
     function selectDifficulty(level) {
-      if (level === "easy") difficultyEl.value = "easy";
-      else if (level === "medium") difficultyEl.value = "medium";
-      else difficultyEl.value = "hard";
+      currentDifficulty = level;
+      if (level === "easy") {
+        aiName = 'HỌC SINH';
+        aiImg = 'https://thumb.ac-illust.com/ec/ec7de22b20b117c9902b8aade7b999f9_t.jpeg';
+        aiColor = 'green';
+      } else if (level === "medium") {
+        aiName = 'ĐẠI HỌC';
+        aiImg = 'https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg';
+        aiColor = 'blue';
+      } else {
+        aiName = 'LÃO LÀNG';
+        aiImg = 'https://i.pinimg.com/564x/0a/d0/c2/0ad0c2dcf22c5257a8bd6385c37aa100.jpg';
+        aiColor = 'red';
+      }
       document.getElementById("difficultyModal").style.display = "none";
       startGame();
     }
