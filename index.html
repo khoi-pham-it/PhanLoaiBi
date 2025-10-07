@@ -387,6 +387,42 @@
         color: #dc2626;
       }
     }
+    @keyframes shineFlashe {
+    0%, 100% {
+      color: #05f932;
+      text-shadow: none;
+      transform: scale(1);
+    }
+    50% {
+      color: #2c561e;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      transform: scale(1.1);
+    }
+  }
+  @keyframes shineFlashm {
+    0%, 100% {
+      color: #1f0db8;
+      text-shadow: none;
+      transform: scale(1);
+    }
+    50% {
+      color: #191a3d;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      transform: scale(1.1);
+    }
+  }
+  @keyframes shineFlashh {
+    0%, 100% {
+      color: #dd1c1c;
+      text-shadow: none;
+      transform: scale(1);
+    }
+    50% {
+      color: #52271a;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      transform: scale(1.1);
+    }
+  }
 
     .difficulty-card.easy p {
       animation: floatGlowEasy 3s ease-in-out infinite;
@@ -400,15 +436,15 @@
       animation: floatGlowHard 3s ease-in-out infinite;
     }
     .difficulty-card.easy h3 {
-      animation: floatGlowEasy 3s ease-in-out infinite;
+      animation: shineFlashe  2s ease-in-out infinite;
     }
 
     .difficulty-card.medium h3 {
-      animation: floatGlowMedium 3s ease-in-out infinite;
+      animation: shineFlashm  2s ease-in-out infinite;
     }
 
     .difficulty-card.hard h3 {
-      animation: floatGlowHard 3s ease-in-out infinite;
+      animation: shineFlashh  2s ease-in-out infinite;
     }
   </style>
 </head>
@@ -823,7 +859,7 @@
       overlay.style.display = 'flex';
       const playerFinishTime = gameActive ? (Date.now() - gameStartTime) : (TIME_LIMIT * 1000 - remainingTime * 1000); // Thời gian người chơi hoàn thành
       const aiTime = aiFinishTime ? (aiFinishTime - gameStartTime) : Infinity; // Nếu AI chưa hoàn thành, thời gian là Infinity
-      let msg = `Bạn: ${Math.floor(playerFinishTime / 1000)} giây | AI: ${aiFinishTime ? Math.floor(aiTime / 1000) : 'Chưa hoàn thành'}<br/>`;
+      let msg = `Bạn: ${Math.floor(playerFinishTime / 1000)} giây | AI: ${aiFinishTime ? Math.floor(aiTime / 1000 ) +' giây' : 'Chưa hoàn thành'}<br/>`;
       if (scoreHuman >= MARBLES_TOTAL && (!aiFinishTime || playerFinishTime < aiTime)) msg += "🎉 Bạn thắng!";
       else if (aiFinishTime && aiTime < playerFinishTime) msg += "🤖 AI thắng!";
       else if (playerFinishTime >= TIME_LIMIT * 1000 && !aiFinishTime) msg += "⚖️ Hòa!";
