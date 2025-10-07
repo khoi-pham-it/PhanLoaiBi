@@ -50,16 +50,24 @@
       padding: 18px;
       border-radius: 12px;
       box-shadow: 0 6px 20px rgba(2, 6, 23, 0.6);
-    }
-
-    .boardWrap {
       display: flex;
-      gap: 28px;
-      justify-content: space-between;
+      justify-content: space-around;
+      gap: 40px;
     }
 
-    .side {
+    .side-panel {
       flex: 1;
+      border: 2px solid #3b82f6;
+      border-radius: 12px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .side-panel h2 {
+      text-align: center;
+      color: #7dd3fc;
+      margin-bottom: 15px;
+      font-size: 22px;
     }
 
     .board {
@@ -177,55 +185,18 @@
       transition: transform .6s ease-in-out, opacity .6s;
     }
 
-    @media (max-width:768px) {
-      .board {
-        height: 200px;
-      }
-
-      .bucket {
-        width: 70px;
-        height: 140px;
-      }
-
-      .marble {
-        width: 28px;
-        height: 28px;
-      }
-    }
-
-    .bucket[data-color="red"] {
-      background: linear-gradient(180deg, #f87171, #991b1b);
-      border: 3px solid #ef4444;
-    }
-
-    .bucket[data-color="yellow"] {
-      background: linear-gradient(180deg, #fde047, #ca8a04);
-      border: 3px solid #facc15;
-    }
-
-    .bucket[data-color="blue"] {
-      background: linear-gradient(180deg, #60a5fa, #1e3a8a);
-      border: 3px solid #3b82f6;
-    }
-
     @media (max-width: 1024px) {
-      .boardWrap {
+      .game {
         flex-direction: column;
         gap: 20px;
       }
 
-      .side {
+      .side-panel {
         width: 100%;
       }
     }
 
     @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
       .board {
         height: auto;
         flex-wrap: wrap;
@@ -269,6 +240,21 @@
       }
     }
 
+    .bucket[data-color="red"] {
+      background: linear-gradient(180deg, #f87171, #991b1b);
+      border: 3px solid #ef4444;
+    }
+
+    .bucket[data-color="yellow"] {
+      background: linear-gradient(180deg, #fde047, #ca8a04);
+      border: 3px solid #facc15;
+    }
+
+    .bucket[data-color="blue"] {
+      background: linear-gradient(180deg, #60a5fa, #1e3a8a);
+      border: 3px solid #3b82f6;
+    }
+
     .difficulty-card {
       display: flex;
       flex-direction: column;
@@ -276,8 +262,8 @@
       justify-content: space-between;
       padding: 16px;
       border-radius: 12px;
-      width: 200px;
-      min-height: 300px;
+      width: 280px;
+      min-height: 280px;
       text-align: center;
       box-sizing: border-box;
       position: relative;
@@ -288,6 +274,7 @@
       height: 100px;
       object-fit: contain;
       margin-bottom: 10px;
+      padding: -20px;
     }
 
     .difficulty-card h3 {
@@ -306,10 +293,14 @@
       justify-content: center;
       width: 100%;
       text-align: center;
+      padding: -20px;
     }
 
     .difficulty-card button {
       margin-top: auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 20px;
     }
 
     .difficulty-card .difficulty-title {
@@ -319,8 +310,9 @@
       font-size: 14px;
       font-weight: bold;
       padding: 4px 8px;
-      border-radius: 4px;
+      border-radius: 20px;
       color: #fff;
+      padding: 10px;
     }
 
     .difficulty-card.easy .difficulty-title {
@@ -335,30 +327,77 @@
       background: #ef4444;
     }
 
-    @keyframes floatGlow {
+    .difficulty-card.easy button {
+      background: #22c55e;
+      width: 150px;
+    }
+
+    .difficulty-card.medium button {
+      background: #3b82f6;
+      width: 150px;
+    }
+
+    .difficulty-card.hard button {
+      background: #ef4444;
+      width: 150px;
+    }
+
+    @keyframes floatGlowEasy {
 
       0%,
       100% {
-        transform: translateY(0);
-        color: #ef4444;
+        text-shadow: none;
+        color: #000000;
       }
 
       50% {
         transform: translateY(-6px);
-        color: #facc15;
+        text-shadow: 0 0 6px rgba(255, 102, 0, 0.6);
+        color: #26bd3a;
+      }
+    }
+
+    @keyframes floatGlowMedium {
+
+      0%,
+      100% {
+        text-shadow: none;
+        color: #060b12;
+      }
+
+      50% {
+        transform: translateY(-6px);
+        text-shadow: 0 0 6px rgba(255, 102, 0, 0.6);
+        color: #2563eb;
+      }
+    }
+
+    @keyframes floatGlowHard {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        text-shadow: none;
+        color: #000000;
+      }
+
+      50% {
+        transform: translateY(-6px);
+        text-shadow: 0 0 6px rgba(255, 102, 0, 0.6);
+        color: #dc2626;
       }
     }
 
     .difficulty-card.easy p {
-      animation: floatGlow 1.5s ease-in-out infinite;
+      animation: floatGlowEasy 3s ease-in-out infinite;
     }
 
     .difficulty-card.medium p {
-      animation: floatGlow 2.2s ease-in-out infinite;
+      animation: floatGlowMedium 3s ease-in-out infinite;
     }
 
     .difficulty-card.hard p {
-      animation: floatGlow 3s ease-in-out infinite;
+      animation: floatGlowHard 3s ease-in-out infinite;
     }
   </style>
 </head>
@@ -366,11 +405,11 @@
 <body>
   <div class="modal" id="difficultyModal"
     style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); z-index:999;">
-    <div class="modal-content" style="background:#fff;border-radius:15px;padding:20px 30px;max-width:800px;">
+    <div class="modal-content" style="background:#fff;border-radius:15px;padding:15px 30px;max-width:900px;">
       <h2 style="color: red;"> Chọn bạn 'AI' để thi đấu</h2>
-      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <div style="display:flex; gap:5px; justify-content:center; flex-wrap:wrap;">
         <div class="difficulty-card easy"
-          style="border:3px solid green; padding:12px; border-radius:12px; width:200px; text-align:center;">
+          style="border:3px solid green; padding:15px; border-radius:12px; width:280px; text-align:center;">
           <span class="difficulty-title">DỄ</span>
           <img src="https://thumb.ac-illust.com/ec/ec7de22b20b117c9902b8aade7b999f9_t.jpeg" alt="Dễ"
             style="width:100px;height:100px;">
@@ -379,7 +418,7 @@
           <button onclick="selectDifficulty('easy')">Chọn</button>
         </div>
         <div class="difficulty-card medium"
-          style="border:3px solid blue; padding:12px; border-radius:12px; width:200px; text-align:center;">
+          style="border:3px solid blue; padding:15px; border-radius:12px; width:280px; text-align:center;">
           <span class="difficulty-title">TRUNG BÌNH</span>
           <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="Trung Bình"
             style="width:100px;height:100px;">
@@ -388,7 +427,7 @@
           <button onclick="selectDifficulty('medium')">Chọn</button>
         </div>
         <div class="difficulty-card hard"
-          style="border:3px solid red; padding:12px; border-radius:12px; width:200px; text-align:center;">
+          style="border:3px solid red; padding:15px; border-radius:12px; width:280px; text-align:center;">
           <span class="difficulty-title">KHÓ</span>
           <img src="https://i.pinimg.com/564x/0a/d0/c2/0ad0c2dcf22c5257a8bd6385c37aa100.jpg" alt="Khó"
             style="width:100px;height:100px;">
@@ -415,43 +454,41 @@
     </header>
 
     <section class="game">
-      <div class="boardWrap">
-        <div class="side">
-          <h2>Người chơi</h2>
-          <div class="board" id="boardHuman">
-            <div class="bucket" data-color="red"><span>Đỏ</span>
-              <div class="count">0</div>
-            </div>
-            <div class="bucket" data-color="yellow"><span>Vàng</span>
-              <div class="count">0</div>
-            </div>
-            <div class="bucket" data-color="blue"><span>Xanh</span>
-              <div class="count">0</div>
-            </div>
+      <div class="side-panel" id="playerPanel">
+        <h2>NGƯỜI CHƠI</h2>
+        <div class="board" id="boardHuman">
+          <div class="bucket" data-color="red"><span>Đỏ</span>
+            <div class="count">0</div>
           </div>
-          <div class="marbles" id="humanMarbles" aria-live="polite"></div>
-          <div class="info">Điểm: <span id="scoreHuman">0</span> | <span id="statusHuman">...</span></div>
-        </div>
-
-        <div class="side">
-          <h2>AI</h2>
-          <div class="board" id="boardAI">
-            <div class="bucket" data-color="red"><span>Đỏ</span>
-              <div class="count">0</div>
-            </div>
-            <div class="bucket" data-color="yellow"><span>Vàng</span>
-              <div class="count">0</div>
-            </div>
-            <div class="bucket" data-color="blue"><span>Xanh</span>
-              <div class="count">0</div>
-            </div>
+          <div class="bucket" data-color="yellow"><span>Vàng</span>
+            <div class="count">0</div>
           </div>
-          <div class="marbles" id="aiMarbles"></div>
-          <div class="info">Điểm: <span id="scoreAI">0</span> | <span id="statusAI">...</span></div>
+          <div class="bucket" data-color="blue"><span>Xanh</span>
+            <div class="count">0</div>
+          </div>
         </div>
+        <div class="marbles" id="humanMarbles" aria-live="polite"></div>
+        <div class="info">Điểm: <span id="scoreHuman">0</span> | <span id="statusHuman">...</span></div>
       </div>
-      <div class="footer">Kéo thả bi vào đúng lọ. AI cũng phân loại cùng lúc.</div>
+
+      <div class="side-panel" id="aiPanel">
+        <h2>AI</h2>
+        <div class="board" id="boardAI">
+          <div class="bucket" data-color="red"><span>Đỏ</span>
+            <div class="count">0</div>
+          </div>
+          <div class="bucket" data-color="yellow"><span>Vàng</span>
+            <div class="count">0</div>
+          </div>
+          <div class="bucket" data-color="blue"><span>Xanh</span>
+            <div class="count">0</div>
+          </div>
+        </div>
+        <div class="marbles" id="aiMarbles"></div>
+        <div class="info">Điểm: <span id="scoreAI">0</span> | <span id="statusAI">...</span></div>
+      </div>
     </section>
+    <div class="footer">Kéo thả bi vào đúng lọ. AI cũng phân loại cùng lúc.</div>
   </div>
 
   <div class="overlay" id="overlay">
@@ -473,6 +510,8 @@
     let touchStartX = 0;
     let touchStartY = 0;
     let timerStarted = false; // Biến để kiểm tra xem bộ đếm thời gian đã bắt đầu chưa
+    let gameStartTime = null; // Thời gian bắt đầu game
+    let aiFinishTime = null; // Thời gian AI hoàn thành
 
     const humanMarblesContainer = document.getElementById('humanMarbles');
     humanMarblesContainer.addEventListener('touchstart', e => {
@@ -633,6 +672,7 @@
       // Bắt đầu bộ đếm thời gian khi người chơi thả viên bi đầu tiên
       if (!timerStarted) {
         timerStarted = true;
+        gameStartTime = Date.now(); // Ghi lại thời gian bắt đầu
         startTimer(TIME_LIMIT);
       }
 
@@ -703,15 +743,13 @@
         aiTimer = null;
       }
       aiTimer = setInterval(() => {
-        if (!gameActive) {
+        if (!gameActive || idx >= marbles.length) {
+          if (idx >= marbles.length && !aiFinishTime) {
+            aiFinishTime = Date.now(); // Ghi lại thời gian AI hoàn thành
+            statusAI.textContent = 'AI xong';
+          }
           clearInterval(aiTimer);
           aiTimer = null;
-          return;
-        }
-        if (idx >= marbles.length) {
-          clearInterval(aiTimer);
-          aiTimer = null;
-          statusAI.textContent = 'AI xong';
           return;
         }
         const m = marbles[idx++];
@@ -727,16 +765,10 @@
             scoreAI++;
             scoreAIEl.textContent = scoreAI;
             updateBucketCounts('boardAI');
-            if (scoreAI >= MARBLES_TOTAL) {
-              endGameEarly('ai');
-            }
           }, 260);
         } else {
           scoreAI++;
           scoreAIEl.textContent = scoreAI;
-          if (scoreAI >= MARBLES_TOTAL) {
-            endGameEarly('ai');
-          }
         }
       }, AI_SPEED);
     }
@@ -768,25 +800,23 @@
         clearInterval(mainTimer);
         mainTimer = null;
       }
-      if (aiTimer) {
-        clearInterval(aiTimer);
-        aiTimer = null;
-      }
-      gameActive = false;
       if (winner === 'player') {
         statusHuman.textContent = '🎉 Hoàn thành!';
+        gameActive = false;
+        showResult();
       }
-      if (winner === 'ai') {
-        statusAI.textContent = '🤖 Hoàn thành!';
-      }
-      showResult();
+      // Không dừng game khi AI hoàn thành, để người chơi tiếp tục
     }
 
     function showResult() {
       overlay.style.display = 'flex';
-      let msg = `Bạn: ${scoreHuman} điểm | AI: ${scoreAI} điểm<br/>`;
-      if (scoreHuman > scoreAI) msg += "🎉 Bạn thắng!";
-      else if (scoreHuman < scoreAI) msg += "🤖 AI thắng!";
+      const playerFinishTime = gameActive ? (Date.now() - gameStartTime) : (TIME_LIMIT * 1000 - remainingTime * 1000); // Thời gian người chơi hoàn thành
+      const aiTime = aiFinishTime ? (aiFinishTime - gameStartTime) : Infinity; // Nếu AI chưa hoàn thành, thời gian là Infinity
+      let msg = `Bạn: ${Math.floor(playerFinishTime / 1000)} giây | AI: ${aiFinishTime ? Math.floor(aiTime / 1000) : 'Chưa hoàn thành'}<br/>`;
+      if (scoreHuman >= MARBLES_TOTAL && (!aiFinishTime || playerFinishTime < aiTime)) msg += "🎉 Bạn thắng!";
+      else if (aiFinishTime && aiTime < playerFinishTime) msg += "🤖 AI thắng!";
+      else if (playerFinishTime >= TIME_LIMIT * 1000 && !aiFinishTime) msg += "⚖️ Hòa!";
+      else if (!aiFinishTime) msg += "🎉 Bạn thắng! (AI chưa hoàn thành)";
       else msg += "⚖️ Hòa!";
       resultText.innerHTML = msg;
     }
@@ -802,6 +832,8 @@
         aiTimer = null;
       }
       timerStarted = false; // Reset trạng thái bộ đếm thời gian
+      gameStartTime = null; // Reset thời gian bắt đầu
+      aiFinishTime = null; // Reset thời gian AI hoàn thành
       startGame();
     }
     btnRestart.addEventListener('click', restart);
@@ -820,7 +852,7 @@
         MARBLES_TOTAL = 6;
         AI_SPEED = 700;
         TIME_LIMIT = 30;
-      } else if (diff === 'hard') {
+      } else {
         MARBLES_TOTAL = 7;
         AI_SPEED = 400;
         TIME_LIMIT = 30;
