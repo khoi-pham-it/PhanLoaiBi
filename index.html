@@ -557,7 +557,6 @@
             <h3 style="color:green;">AI HỌC SINH</h3>
             <p>Đã được huấn luyện trong 1 ngày</p>
           </div>
-
           <button onclick="selectDifficulty('easy')">Chọn</button>
         </div>
         <div class="difficulty-card medium"
@@ -569,7 +568,6 @@
             <h3 style="color:blue;">AI ĐẠI HỌC</h3>
             <p>Đã được huấn luyện trong 1 tuần</p>
           </div>
-
           <button onclick="selectDifficulty('medium')">Chọn</button>
         </div>
         <div class="difficulty-card hard"
@@ -586,7 +584,6 @@
       </div>
     </div>
   </div>
-
   <div class="wrap">
     <header>
       <h1>Phân loại bi màu</h1>
@@ -594,11 +591,12 @@
         <span class="timer">⏱ <span id="timeLeft">30</span>s</span>
       </div>
     </header>
-
     <section class="game">
       <div class="side-panel" id="playerPanel">
         <div>
-          <h2 style="color: #6fff00;">NGƯỜI CHƠI</h2>
+          <h2 style="color: #6fff00;">NGƯỜI CHƠI <img
+              src="https://static.vecteezy.com/system/resources/previews/031/347/067/non_2x/cute-boy-playing-guitar-and-listening-to-music-with-headset-in-cartoon-style-youth-day-or-music-day-concept-by-ai-generated-free-photo.jpg"
+              alt="Người chơi" style="width:50px; height:50px; border-radius:50%;"></h2>
         </div>
         <div class="board" id="boardHuman">
           <div class="bucket" data-color="red"><span>Đỏ</span>
@@ -614,7 +612,6 @@
         <div class="marbles" id="humanMarbles" aria-live="polite"></div>
         <div class="info">Điểm: <span id="scoreHuman">0</span> | <span id="statusHuman">...</span></div>
       </div>
-
       <div class="side-panel" id="aiPanel">
         <div>
           <h2>AI</h2>
@@ -636,7 +633,6 @@
     </section>
     <div class="footer">Kéo thả bi màu vào đúng lọ có cùng màu sắc.</div>
   </div>
-
   <div class="overlay" id="overlay">
     <div class="popup">
       <h2>Kết quả</h2>
@@ -644,14 +640,11 @@
       <button id="btnRestart">Chơi lại</button>
     </div>
   </div>
-
   <div id="countdown" class="countdown-overlay">
     <span id="countdown-number"></span>
   </div>
-
   <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-
   <script>
     let lastTouchTime = 0;
     let aiStarted = false;
@@ -666,21 +659,17 @@
     let aiImg = '';
     let aiColor = '';
     let currentDifficulty = 'medium';
-
     const humanMarblesContainer = document.getElementById('humanMarbles');
     humanMarblesContainer.addEventListener('touchstart', e => {
       e.preventDefault();
       if (!gameActive) return;
-
       const target = e.target.closest('.marble');
       if (!target || target.parentElement.id !== 'humanMarbles') return;
-
       document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
       target.classList.add('selected', 'dragging');
       currentMarble = target;
       statusHuman.textContent = `Chọn bi ${target.dataset.color}. Kéo hoặc chạm vào lọ để thả.`;
       lastTouchTime = Date.now();
-
       const rect = target.getBoundingClientRect();
       touchStartX = e.touches[0].clientX - rect.left;
       touchStartY = e.touches[0].clientY - rect.top;
@@ -690,7 +679,6 @@
       target.style.top = `${rect.top}px`;
       target.style.transform = 'translate(0px, 0px)';
     }, { passive: false });
-
     document.addEventListener('touchmove', e => {
       if (!gameActive || !currentMarble) return;
       e.preventDefault();
@@ -699,7 +687,6 @@
       const dy = touch.clientY - touchStartY - currentMarble.getBoundingClientRect().top + (currentMarble.offsetHeight / 2);
       currentMarble.style.transform = `translate(${dx}px, ${dy}px)`;
     }, { passive: false });
-
     document.addEventListener('touchend', e => {
       if (!gameActive || !currentMarble) return;
       e.preventDefault();
@@ -714,7 +701,6 @@
         currentMarble = null;
         return;
       }
-
       handleDrop(bucket, currentMarble);
       currentMarble.style.position = 'static';
       currentMarble.style.transform = '';
@@ -722,7 +708,6 @@
       currentMarble.classList.remove('dragging', 'selected');
       currentMarble = null;
     }, { passive: false });
-
     const colors = ['red', 'yellow', 'blue'];
     const humanMarbles = document.getElementById('humanMarbles');
     const aiMarbles = document.getElementById('aiMarbles');
@@ -736,7 +721,6 @@
     const btnRestart = document.getElementById('btnRestart');
     const soundCorrect = document.getElementById('soundCorrect');
     const soundWrong = document.getElementById('soundWrong');
-
     let MARBLES_TOTAL = 6;
     let AI_SPEED = 700;
     let TIME_LIMIT = 30;
@@ -744,9 +728,7 @@
     let gameActive = false;
     let mainTimer = null, aiTimer = null;
     let remainingTime = TIME_LIMIT;
-
     function uid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
-
     function updateBucketCounts(boardId) {
       const buckets = document.querySelectorAll(`#${boardId} .bucket`);
       buckets.forEach(b => {
@@ -756,7 +738,6 @@
         countEl.textContent = cnt;
       });
     }
-
     function clearBuckets(boardId) {
       document.querySelectorAll(`#${boardId} .bucket`).forEach(b => {
         b.querySelectorAll('.marble').forEach(m => m.remove());
@@ -764,7 +745,6 @@
         if (countEl) countEl.textContent = 0;
       });
     }
-
     function createMarble(container, color = null) {
       const c = color || colors[Math.floor(Math.random() * colors.length)];
       const m = document.createElement('div');
@@ -774,7 +754,6 @@
       m.dataset.id = id;
       m.setAttribute('role', 'button');
       m.setAttribute('aria-label', `Bi ${c}`);
-
       if (container === humanMarbles) {
         m.draggable = true;
         m.addEventListener('dragstart', e => {
@@ -790,11 +769,9 @@
       } else {
         m.draggable = false;
       }
-
       container.appendChild(m);
       return m;
     }
-
     function animateFly(m, target) {
       try {
         const rect = m.getBoundingClientRect();
@@ -816,25 +793,21 @@
         setTimeout(() => clone.remove(), 600);
       } catch (e) { /* ignore animation errors */ }
     }
-
     function handleDrop(bucket, el) {
       const expected = bucket.dataset.color;
       animateFly(el, bucket);
-
       // Bắt đầu bộ đếm thời gian khi người chơi thả viên bi đầu tiên
       if (!timerStarted) {
         timerStarted = true;
         gameStartTime = Date.now(); // Ghi lại thời gian bắt đầu
         startTimer(TIME_LIMIT);
       }
-
       setTimeout(() => {
         if (expected === el.dataset.color) {
           bucket.appendChild(el);
           el.style.position = 'static';
           el.style.transform = 'scale(0.7)';
           el.style.margin = '2px';
-
           scoreHuman++;
           scoreHumanEl.textContent = scoreHuman;
           statusHuman.textContent = '✅ Đúng!';
@@ -854,13 +827,11 @@
         }
       }, 220);
     }
-
     function setupDropHandlers() {
       document.querySelectorAll('#boardHuman .bucket').forEach((bucket, i) => {
         const newBucket = bucket.cloneNode(true);
         bucket.parentNode.replaceChild(newBucket, bucket);
       });
-
       document.querySelectorAll('#boardHuman .bucket').forEach(bucket => {
         bucket.addEventListener('dragover', e => {
           if (gameActive) {
@@ -873,16 +844,13 @@
           if (!gameActive) return;
           e.preventDefault();
           bucket.classList.remove('highlight');
-
           let id = e.dataTransfer.getData('text/plain');
           let el = document.querySelector(`.marble[data-id="${id}"]`) || document.querySelector('.marble.selected');
           if (!el) return;
-
           handleDrop(bucket, el);
         });
       });
     }
-
     function runAI() {
       clearBuckets('boardAI');
       const marbles = [...aiMarbles.querySelectorAll('.marble')];
@@ -924,7 +892,6 @@
         }
       }, AI_SPEED);
     }
-
     function startTimer(t = 30) {
       remainingTime = t;
       timeLeftEl.textContent = remainingTime;
@@ -946,7 +913,6 @@
         }
       }, 1000);
     }
-
     function endGameEarly(winner) {
       if (mainTimer) {
         clearInterval(mainTimer);
@@ -959,7 +925,6 @@
       }
       // Không dừng game khi AI hoàn thành, để người chơi tiếp tục
     }
-
     function showResult() {
       overlay.style.display = 'flex';
       const playerFinishTime = gameActive ? (Date.now() - gameStartTime) : (TIME_LIMIT * 1000 - remainingTime * 1000); // Thời gian người chơi hoàn thành
@@ -972,7 +937,6 @@
       else msg += "⚖️ Hòa!";
       resultText.innerHTML = msg;
     }
-
     function restart() {
       overlay.style.display = 'none';
       if (mainTimer) {
@@ -989,7 +953,6 @@
       document.getElementById("difficultyModal").style.display = "flex";
     }
     btnRestart.addEventListener('click', restart);
-
     function startCountdown() {
       const countdownEl = document.getElementById('countdown');
       const numberEl = document.getElementById('countdown-number');
@@ -1016,7 +979,6 @@
         }
       }, 1000);
     }
-
     function startGame() {
       aiStarted = false;
       timerStarted = false; // Reset trạng thái bộ đếm thời gian
@@ -1036,12 +998,10 @@
         AI_SPEED = 400;
         TIME_LIMIT = 30;
       }
-
       // Cập nhật tiêu đề AI với tên, ảnh và màu
       const aiHeader = document.querySelector('#aiPanel h2');
-      aiHeader.innerHTML = `AI ${aiName} <img src="${aiImg}" alt="${aiName}" style="width:30px; height:30px; border-radius:50%;">`;
+      aiHeader.innerHTML = `AI ${aiName} <img src="${aiImg}" alt="${aiName}" style="width:50px; height:50px; border-radius:50%;">`;
       aiHeader.style.color = aiColor;
-
       scoreHuman = 0;
       scoreAI = 0;
       scoreHumanEl.textContent = '0';
@@ -1053,24 +1013,19 @@
       clearBuckets('boardHuman');
       clearBuckets('boardAI');
       gameActive = true;
-
       const gameColors = [];
       for (let i = 0; i < MARBLES_TOTAL; i++) {
         gameColors.push(colors[Math.floor(Math.random() * colors.length)]);
       }
-
       for (let i = 0; i < MARBLES_TOTAL; i++) {
         createMarble(humanMarbles, gameColors[i]);
         createMarble(aiMarbles, gameColors[i]);
       }
-
       updateBucketCounts('boardHuman');
       updateBucketCounts('boardAI');
-
       setupDropHandlers();
       timeLeftEl.textContent = TIME_LIMIT; // Hiển thị thời gian ban đầu nhưng chưa bắt đầu đếm ngược
     }
-
     function selectDifficulty(level) {
       currentDifficulty = level;
       if (level === "easy") {
@@ -1089,31 +1044,25 @@
       document.getElementById("difficultyModal").style.display = "none";
       startCountdown();
     }
-
     (function initPreview() {
       humanMarbles.innerHTML = '';
       aiMarbles.innerHTML = '';
-
       const previewColors = [];
       for (let i = 0; i < 4; i++) {
         previewColors.push(colors[Math.floor(Math.random() * colors.length)]);
       }
-
       for (let i = 0; i < 4; i++) {
         createMarble(humanMarbles, previewColors[i]);
         createMarble(aiMarbles, previewColors[i]);
       }
-
       updateBucketCounts('boardHuman');
       updateBucketCounts('boardAI');
       setupDropHandlers();
-
       // Set default AI header for preview
       const aiHeader = document.querySelector('#aiPanel h2');
-      aiHeader.innerHTML = `AI ĐẠI HỌC <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="ĐẠI HỌC" style="width:30px; height:30px; border-radius:50%;">`;
+      aiHeader.innerHTML = `AI ĐẠI HỌC <img src="https://thumb.ac-illust.com/0d/0dfdaa95ec8165782835268165b07539_t.jpeg" alt="ĐẠI HỌC" style="width:50px; height:50px; border-radius:50%;">`;
       aiHeader.style.color = 'blue';
     })();
-
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         document.querySelectorAll('.marble.selected').forEach(x => x.classList.remove('selected'));
@@ -1125,7 +1074,6 @@
         }
       }
     });
-
     overlay.addEventListener('click', e => {
       if (e.target === overlay) { /* do nothing */ }
     });
