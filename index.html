@@ -618,7 +618,7 @@
   </div>
   <div class="wrap">
     <header>
-      <h1>Phân loại bi màu</h1>
+      <h1>THỬ TÀI PHÂN LOẠI</h1>
       <div class="footer">Kéo thả bi màu vào đúng lọ có cùng màu sắc.</div>
       <div class="timer-container">
         <span class="timer">⏱ <span id="timeLeft">30</span>s</span>
@@ -676,8 +676,10 @@
   <div id="countdown" class="countdown-overlay">
     <span id="countdown-number"></span>
   </div>
-  <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+  <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/accent_bounce.ogg"></audio>
+  <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/low_springy_boing.ogg"></audio>
+  <audio id="soundApplause"
+    src="https://actions.google.com/sounds/v1/crowds/small_crowd_cheer_and_applause.ogg"></audio>
   <script>
     let lastTouchTime = 0;
     let aiStarted = false;
@@ -754,6 +756,7 @@
     const btnRestart = document.getElementById('btnRestart');
     const soundCorrect = document.getElementById('soundCorrect');
     const soundWrong = document.getElementById('soundWrong');
+    const soundApplause = document.getElementById('soundApplause');
     let MARBLES_TOTAL = 6;
     let AI_SPEED = 700;
     let TIME_LIMIT = 30;
@@ -982,6 +985,7 @@
           spread: 70,
           origin: { y: 0.6 }
         });
+        soundApplause && soundApplause.play().catch(() => { });
       }
     }
     function restart() {
