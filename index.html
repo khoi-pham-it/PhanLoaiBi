@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Phân loại bi màu</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
     body {
       font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
@@ -212,7 +213,7 @@
 
     .popup {
       background: #1e293b;
-      padding: 20px 30px;
+      padding: 100px 100px;
       border-radius: 12px;
       text-align: center;
       box-shadow: 0 8px 30px rgba(0, 0, 0, .6);
@@ -962,12 +963,26 @@
       const playerFinishTime = gameActive ? (Date.now() - gameStartTime) : (TIME_LIMIT * 1000 - remainingTime * 1000); // Thời gian người chơi hoàn thành
       const aiTime = aiFinishTime ? (aiFinishTime - gameStartTime) : Infinity; // Nếu AI chưa hoàn thành, thời gian là Infinity
       let msg = `Bạn: ${Math.floor(playerFinishTime / 1000)} giây | AI: ${aiFinishTime ? Math.floor(aiTime / 1000) + ' giây' : 'Chưa hoàn thành'}<br/>`;
-      if (scoreHuman >= MARBLES_TOTAL && (!aiFinishTime || playerFinishTime < aiTime)) msg += "🎉 Bạn thắng!";
+      let isWin = false;
+      if (scoreHuman >= MARBLES_TOTAL && (!aiFinishTime || playerFinishTime < aiTime)) {
+        msg += "🎉 Bạn thắng!";
+        isWin = true;
+      }
       else if (aiFinishTime && aiTime < playerFinishTime) msg += "🤖 AI thắng!";
       else if (playerFinishTime >= TIME_LIMIT * 1000 && !aiFinishTime) msg += "⚖️ Hòa!";
-      else if (!aiFinishTime) msg += "🎉 Bạn thắng! (AI chưa hoàn thành)";
+      else if (!aiFinishTime) {
+        msg += "🎉 Bạn thắng! (AI chưa hoàn thành)";
+        isWin = true;
+      }
       else msg += "⚖️ Hòa!";
       resultText.innerHTML = msg;
+      if (isWin) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
     }
     function restart() {
       overlay.style.display = 'none';
